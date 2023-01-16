@@ -137,8 +137,8 @@ Here is a sample of a minimal OpenVEX document:
 
 ```json
 {
-  "@context": "https://openvex.dev/schema-ld.json",
-  "@id": "VEX-9fb3463de1b57",
+  "@context": "https://openvex.dev/ns",
+  "@id": "https://openvex.dev/docs/example/vex-9fb3463de1b57",
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-08T18:02:03.647787998-06:00",
@@ -163,7 +163,8 @@ The following table lists the fields in the document struct
 
 | Field | Required | Description |
 | --- | --- | --- |
-| @id | ✓ | id is the identifying string for the VEX document. This should be unique per document. |
+| @context | ✓ | The URL linking to the OpenVEX context definition. Fixed to `https://openvex.dev/ns`. | 
+| @id | ✓ | The IRI identifying the VEX document.  |
 | author | ✓ | Author is the identifier for the author of the VEX statement. Ideally, a common name, may be a URI. `author` can be an individual or organization. The author identity SHOULD be cryptographically associated with the signature of the VEX  statement or document or transport. |
 | role | ✓ | role describes the role of the document author.  | 
 | timestamp | ✓ | Timestamp defines the time at which the document was issued. | 
@@ -337,9 +338,9 @@ example, the sole statement has its timestamp data derived from the document:
 
 ```json
 {
-  "@context": "https://openvex.dev/schema-ld.json",
-  "@id": "VEX-9fb3463de1b57",
-  "author": "Unknown Author",
+  "@context": "https://openvex.dev/ns",
+  "@id": "https://openvex.dev/docs/example/vex-9fb3463de1b57",
+  "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-08T18:02:03-06:00",
   "version": "1",
@@ -362,9 +363,9 @@ to avoid duplication:
 
 ```json
 {
-  "@context": "https://openvex.dev/schema-ld.json",
-  "@id": "VEX-6ea13336fa2ffb7",
-  "author": "Unknown Author",
+  "@context": "https://openvex.dev/ns",
+  "@id": "https://openvex.dev/docs/example/vex-84822c4e5028c",
+  "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-09T09:08:42-06:00",
   "version": "1",
@@ -388,12 +389,64 @@ to avoid duplication:
 }
 ```
 
+## OpenVEX and JSON-LD
+
+OpenVEX documents express data that is by nature interlinked. Documents and are
+designed to be understood by [JSON-LD](https://www.w3.org/TR/json-ld11/) parsers,
+this lets them reference resources expressed in other json-ld formats such as
+[SPDX 3](https://github.com/spdx/spdx-3-model). 
+
+### VEX Extensions
+
+To make VEX documents JSON-LD compatible, OpenVEX extends the VEX minimum
+requirements in the the following two ways:
+
+1. OpenVEX extends the document identifier required by VEX to make the strings
+compatible with the Internationalized Resource Identifier (IRI) specification
+(see [RFC3987](https://www.rfc-editor.org/rfc/rfc3987)). 
+
+2. Addition of the `@context` field at the document level. The additional field is
+not required by VEX but it is added to make the documents parseable by json-ld
+processors. 
+
+### Public IRI Namespaces
+
+As all documents are required to be identified by an IRI, open vex defines a 
+public namespace that can be used by documents. Users of OpenVEX MAY choose to
+use the shared namespace.
+
+The shared namespace is defined under the openvex.dev domain name:
+
+`    https://openvex.dev/docs/[name]    `
+
+Users can start issuing IRIs for their documents by appending a IRI valid string
+to the shared namespace:
+
+`    https://openvex.dev/docs/[myproject]    `
+
+There are two reserved shared namespaces with special meanings:
+
+- `public` this is a public shared name where anybody that needs a valid IRI can
+issue identifiers. Only recommended for demos or experiments where name collisions
+don't matter.
+- `example` a namespace for documentation, demos or other uses where no systems
+are expected to run.
+
+Please note that initially, OpenVEX does not provide a registry of namespaces or
+hosting or redirection of IRIs. 
+
+For more information check the OpenVEX [JSON-LD](JSON-LD.md) document and the
+W3C's [JSON-LD reommendation](https://www.w3.org/TR/json-ld11/).
+
+
+
 ## Revisions 
 
 | Date | Revision |
 | --- | --- | 
 | 2023-01-08 | First Draft of the OpenVEX Specification |
-| 2023-01-16 | Updated to reflect @luhring's review |
+| 2023-01-16 | Updated specx draft to reflect initial review |
+| 2023-01-16 | Added JSON-LD and namespace section |
 
 
 ## Sources
