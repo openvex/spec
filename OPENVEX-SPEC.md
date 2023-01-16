@@ -84,6 +84,12 @@ document and stop alerting about the CVE as it no longer impacts the product.
 
 ### Definitions 
 
+The following definitions are used throughout this document.
+
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" are to be interpreted as
+described in [RFC2119](https://www.ietf.org/rfc/rfc2119.txt).
+
 #### Document
 
 A data structure that groups together one or more VEX statements. A document
