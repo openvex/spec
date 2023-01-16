@@ -11,70 +11,74 @@ Security Agency](https://www.cisa.gov/) (CISA).
 
 ## About VEX
 
-Vulnerability Exploitability eXchange is a vulnerability document designed to complement a Software Bill of Materials (SBOM) that informs users of a software product of the status of the impact of a vulnerability.
+Vulnerability Exploitability eXchange is a vulnerability document designed to
+complement a Software Bill of Materials (SBOM) that informs users of a software
+product about the applicability of one or more vulnerability findings.
 
-Security scanners often will detect and flag components in software that have
+Security scanners will detect and flag components in software that have
 been identified as being vulnerable. Often, software is not necessarily affected
-as signaled by security scanners for many reasons: the vulnerable component may
-have been already patched, not present, or is simply never executed. To turn off
+as signaled by security scanners for many reasons such as: the vulnerable component may
+have been already patched, may not be present, or may not be able to be executed. To turn off
 false alerts like these, a scanner may consume VEX data from the software supplier.
 
 The extreme transparency brought by SBOMs into how software is composed will 
 most likely increase the number of these kind of false positives, requiring an
-automated solution to avoid an explosion in the signal-to-noise ratio of
-security scans. Hence VEX.
+automated solution to avoid an explosion in the false positive rate of security
+scans. Hence VEX.
 
-## The VEX Impact Statement
+## The VEX Statement
 
-VEX centers on the notion of an _impact statement_. In short, an impact statement
-can be summarized as the sum of a product, a vulnerability, and a status:
+VEX centers on the notion of a _statement_. In short, a statement can be defined
+as an assertion intersecting product, a vulnerability, and an impact status:
 
 ```
-   impact_statement = product(s)             + vulnerability              + status
-                      │                        │                            │
-                      └ The software product   └ Typically a CVE related    └ One of the impact
-                        we are talking about     to one of the product's      statuses as identified
-                                                 components                   by the VEX working group.
+   statement = product(s)             + vulnerability              + status
+               │                        │                            │
+               └ The software product   └ Typically a CVE related    └ One of the impact
+                 we are talking about     to one of the product's      statuses as identified
+                                          components                   by the VEX working group.
 ```
 
 The `product` is a piece of software that can be correlated to an entry in an
 SBOM (see [Product](#Product) below). `vulnerability` is the ID of a security 
-vulnerability as understood by scanners and that can be looked up in a vulnerability
+vulnerability as understood by scanners, which can be looked up in a vulnerability
 tracking system. `status` is one of the impact status labels defined by VEX
 (see [Status](#Status)).
 
 Another key part of VEX is time. It matters _when_ statements are made. VEX is
 designed to be a sequence of statements, each overriding, but also enriching 
-the previous ones with new information. Each impact statement has a timestamp
-associated with it.
+the previous ones with new information. Each statement has a timestamp
+associated with it, either exlicitly in the markup or derived from containint
+structures (see [Inheritance Flow](#Inheritance Flow)).
 
 ## VEX Documents
 
-A VEX document is a data structure grouping one or more impact statements.
+A VEX document is a data structure grouping one or more VEX statements.
 Documents also have timestamps, which may cascade down to statements (see 
-[inheritance](#Inheritance)) and can also be versioned.
+[Inheritance Flow](#Inheritance Flow)). Documents can also be versioned.
 
 ### A Sample Scenario
 
 As an example, consider the following evolution of a hypothetical impact analysis:
 
-1. A software author becomes aware of a new CVE related to its product. Immediately,
-the author starts to check if it affects them.
+1. A software author becomes aware of a new CVE related to their product.
+Immediately, the author starts to check if it affects them.
 2. The investigation determines the product is affected.
 3. To protect their users, the author mitigates the CVE impact via a patch or
 other method before the vulnerable component issues a patch.
 
-During these three steps, users scanning the author's software will simply get
-a thirds party alert with no details on how the status is evolving. Most critically,
-when (in #3) the software is patched, the alert becomes a false positive.
+Without VEX data, users scanning the author's software will simply get
+a third party alert with no details on how the status is evolving. Most critically,
+when the product is patched (in #3), the alert becomes a false positive.
 
-With VEX, the author can issue a VEX document when the CVE is published to 
-inform their users it is under investigation. In #2, when the product is known
-to be affected, the author can ship a new VEX document, stating the product
-is affected and possibly some additional advice. Finally, when patched
-the product's SBOM can be complemented with a VEX document informing it is no
-longer affected by the CVE. Scanners could consume this document and stop
-alerting about the CVE as it no longer impacts the product.
+To inform consumers downstream of the vulnerability evolution, the author can
+issue a VEX document (in #1) when the CVE is published to let their users
+know it is under investigation. In #2, when the product is known to be affected,
+the author can ship a new VEX document, stating the product is affected and
+possibly some additional advice, like temporary mitigation instructions. Finally
+when the product is patched, its SBOM can be complemented with a new VEX document
+informing it is no longer affected by the CVE. Scanners could consume this
+document and stop alerting about the CVE as it no longer impacts the product.
 
 ## OpenVEX Specification
 
@@ -82,8 +86,8 @@ alerting about the CVE as it no longer impacts the product.
 
 #### Document
 
-A data structure that groups together one or more impact statements. A document
-MUST define a timestamp to express when its statements were known to be true.
+A data structure that groups together one or more VEX statements. A document
+MUST define a timestamp to express when it was issued. 
 
 #### Encapsulating Document
 
@@ -101,7 +105,7 @@ as a product.
 
 #### Status
 
-The known relationship a vulnerability has with a software product. The status
+The known relationship a vulnerability has to a software product. The status
 expresses if the product is impacted by the vulnerability or not, if the authors
 are investigating it, or if it has already been fixed.
 
@@ -117,7 +121,7 @@ expected to flow.
 
 #### Subcomponent
 
-Any components possibly included in the product where the vulnerability origintes.
+Any components possibly included in the product where the vulnerability originates.
 The subcomponents SHOULD also be software identifiers and they SHOULD also be
 listed in the product SBOM. subcomponents will most often be one or more of the
 product's dependencies.
@@ -125,7 +129,7 @@ product's dependencies.
 ### Document
 
 A VEX document consists of two parts: The document metadata and a collection
-of impact statements. Some fields in the document metadata are required. 
+of statements. Some fields in the document metadata are required. 
 
 OpenVEX documents are serialized in json-ld structs. File encoding MUST be UTF8.
 
@@ -167,22 +171,31 @@ The following table lists the fields in the document struct
 | tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It's optional. It may specify tools or automated processes used in the document or statement generation. |
 | supplier | ✕ | An optional field specifying who is providing the VEX document. |
 
-### Impact Statement
+### Statement
 
-An impact statement is an assertion made by the document's author about the impact
-a vulnerability has on one or more software "products". The impact statement has
+A statement is an assertion made by the document's author about the impact
+a vulnerability has on one or more software "products". The statement has
 three key components that are valid at a point in time: `status`, a `vulnerability`,
 and the `product` to which these apply (see diagram above).
 
-An impact statement in an OpenVEX document looks like the following snippet:
+A statement in an OpenVEX document looks like the following snippet:
 
+```json
+  "statements": [
+    {
+      "vulnerability": "CVE-2023-12345",
+      "products": [
+        "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7",
+        "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"
+      ],
+      "status": "fixed"
+    }
+  ]
 ```
-TBD
-```
 
-#### Impact Statement Fields
+#### Statement Fields
 
-The following table lists the fields of the impact statement struct.
+The following table lists the fields of the OpenVEX statement struct.
 
 | Field | Required | Description |
 | --- | --- | --- |
@@ -193,10 +206,35 @@ The following table lists the fields of the impact statement struct.
 | subcomponents | ✕ | Identifiers of components where the vulnerability originates. While the statement asserts about the impact on the software product, listing `subcomponents` let scanners find identifiers to match their findings. |
 | status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status)), some of which have further options and requirements. | 
 | status_notes | ✕ | A statement MAY convey information about how `status` was determined and MAY reference other VEX information. |
-| justification | ✕ | For statements conveying a `not_affected` status, a VEX statement MUST include a status justification informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status Justifications) below for valid values. |
-| impact_statement | ✕ | When a product is `not_affected`, the VEX document author MAY include a statement that contains a description of why the vulnerability cannot be exploited. |
-| action_statement | ✕ | For a statement with "affected" status, a VEX statement MAY include a statement that SHOULD describe actions to remediate or mitigate the vulnerability. | 
+| justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status Justifications) below for valid values. |
+| impact_statement | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. An impact statement is a free form text containing a description of why the vulnerability cannot be exploited. This field is not intended to be machine readable so its use is highly discouraged for automated systems. |
+| action_statement | ✕ | For a statement with "affected" status, a VEX statement MUST include a statement that SHOULD describe actions to remediate or mitigate the vulnerability. |
 | action_statement_timestamp | ✕ | The timestamp when the action statement was issued. |
+
+##### Note on `justification` and `impact_statement`
+
+The Minimal Requirements for VEX document states that a `not_affected` statement 
+MUST provide either a machine readable `justification` label or a free form
+text `impact_statement`. OpenVEX defines both required fields but highly discourages
+the use of the impact statement textual form as it breaks VEX automation and
+interoperability.
+
+The recommended pattern from OpenVEX is that issuers SHOULD use the machine
+readable justification labels and optionally enrich the statement with an
+`impact_statement`:
+
+```json
+    {
+      "vulnerability": "CVE-2023-12345",
+      "products": [
+        "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7",
+      ],
+      "status": "not_affected",
+      "justification": "component_not_present",
+      "impact_statement": "The vulnerable code was removed with a custom patch"
+    }
+
+```
 
 ### Status Labels
 
@@ -208,12 +246,12 @@ with contextual data about the evolution of the vulnerability impact.
 
 | Label | Description |
 | --- | --- |
-| `not_affected` | No remediation is required regarding this vulnerability. A `not_affected` status required the addition of a `justification` to the impact statement. |
+| `not_affected` | No remediation is required regarding this vulnerability. A `not_affected` status required the addition of a `justification` to the statement. |
 | `affected` | Actions are recommended to remediate or address this vulnerability. |
 | `fixed` | These product versions contain a fix for the vulnerability. |
 | `under_investigation` | It is not yet known whether these product versions are affected by the vulnerability. Updates should be provided in further VEX documents as knowledge evolves. |
 
-Any of these key data points are required to form a valid impact statement but
+Any of these key data points are required to form a valid statement but
 they are not necessarily required to be defined in the statement's data struct. 
 Consider the following scenarios:
 
@@ -221,7 +259,7 @@ Consider the following scenarios:
 
 When assessing risk, consumers of a `not_affected` software product can know
 why the vulnerability is not affected by reading the justification label
-associated with the impact statement. These labels are predefined and machine-readable
+associated with the VEX statement. These labels are predefined and machine-readable
 to enable automated uses such as deployment policies. The current label catalog
 was defined by the VEX Working Group and published in the 
 [Status Justifications](status-doc) document on July 2022.
@@ -240,7 +278,7 @@ was defined by the VEX Working Group and published in the
 VEX statements can inherit values from their document and/or, when embedded or 
 incorporated into another format, from its [encapsulating document](#encaspu).
 
-A valid impact statement needs to have four key data points which act as 
+A valid VEX statement needs to have four key data points which act as 
 the grammatical parts of a sentence:
 
 - One or more products. These are the direct objects of the statement.
@@ -252,12 +290,12 @@ In OpenVEX, timestamps and product identifiers can be defined outside the
 statements to avoid defining redundant info or to leverage external features.
 
 __Note:__  While this specification lists these data fields as optional in the
-statement data struct, the data MUST be defined to have complete 
-impact statements. A document with incomplete impact statements is not valid.
+statement data struct, the data MUST be defined to have complete statements. A
+document with incomplete statements is not valid.
 
 #### Data Economy 
 
-A document defining four impact statements, all issued at the same time can be
+A document defining multiple statements, all issued at the same time can be
 made less verbose by just inferring the statement timestamps from the date the
 document was issued.
 
@@ -355,6 +393,8 @@ to avoid duplication:
 | Date | Revision |
 | --- | --- | 
 | 2023-01-08 | First Draft of the OpenVEX Specification |
+| 2023-01-16 | Updated to reflect @luhring's review |
+
 
 ## Sources
 
