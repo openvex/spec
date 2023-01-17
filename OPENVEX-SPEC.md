@@ -206,7 +206,7 @@ The following table lists the fields of the OpenVEX statement struct.
 
 | Field | Required | Description |
 | --- | --- | --- |
-| vulnerability | ✓ | vulnerability SHOULD use existing and well known identifiers. For example: CVE, the Global Security Database (GSD), or a supplier’s vulnerability tracking system. It is expected that vulnerability identification systems are external to and maintained separately from VEX.<br>vulnerability MAY be URIs or URLs.<br>vulnerability  MAY be arbitrary and MAY be created by the VEX statement `author`.
+| vulnerability | ✓ | vulnerability SHOULD use existing and well known identifiers. For example: [CVE](https://cve.mitre.org/), [OSV](https://osv.dev/), (GHSA)[https://github.com/advisories], a supplier's vulnerability tracking system such as [RHSA](https://access.redhat.com/security/security-updates/#/) or a propietary system. It is expected that vulnerability identification systems are external to and maintained separately from VEX.<br>vulnerability MAY be URIs or URLs.<br>vulnerability  MAY be arbitrary and MAY be created by the VEX statement `author`.
 | vuln_description | ✕ | Optional free-form text describing the vulnerability | 
 | timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#Inheritance). |
 | products | ✕ | Product identifiers that the statement applies to. Any software identifier can be used and SHOULD be traceable to a described item in an SBOM. The use of [Package URLs](https://github.com/package-url/purl-spec) (purls) is recommended. While a product identifier is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
@@ -444,7 +444,43 @@ hosting or redirection of IRIs.
 For more information check the OpenVEX [JSON-LD](JSON-LD.md) document and the
 W3C's [JSON-LD reommendation](https://www.w3.org/TR/json-ld11/).
 
+## Example
 
+To illustrate how OpenVEX can specify a document switching off a false positive,
+let's look at an example. According to the
+[Spring Blog](https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot),
+the included log4j library in Spring Boot 2.6.0 is within the versions affected by
+the [log4shell vulnerability](https://nvd.nist.gov/vuln/detail/CVE-2021-44228).
+In the post, however the project maintainers explain that it is not exploitable 
+as shipped and they provide some details and guidance to users. 
+
+To capture Spring's advise in an OpenVEX document and fend off any false positives,
+the project could issue an OpenVEX document as follows:
+
+```json
+{
+  "@context": "https://openvex.dev/ns",
+  "@id": "https://openvex.dev/docs/public/vex-2e67563e128250cbcb3e98930df948dd053e43271d70dc50cfa22d57e03fe96f",
+  "author": "Spring Builds <spring-builds@users.noreply.github.com>",
+  "role": "Project Release Bot",
+  "timestamp": "2023-01-16T19:07:16.853479631-06:00",
+  "version": "1",
+  "statements": [
+    {
+      "vulnerability": "CVE-2021-44228",
+      "products": [
+        "pkg:maven/org.springframework.boot/spring-boot@2.6.0"
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path"
+      "impact_statement": "Spring Boot users are only affected by this vulnerability if they have switched the default logging system to Log4J2. The log4j-to-slf4j and log4j-api jars that we include in spring-boot-starter-logging cannot be exploited on their own. Only applications using log4j-core and including user input in log messages are vulnerable.",
+    }
+  ]
+}
+```
+
+VEX-enabled security scanners could use the vex document to turn off the security
+alert and dashboards could present users with the official guidance from the project.
 
 ## Revisions 
 
@@ -453,6 +489,7 @@ W3C's [JSON-LD reommendation](https://www.w3.org/TR/json-ld11/).
 | 2023-01-08 | First Draft of the OpenVEX Specification |
 | 2023-01-16 | Updated specx draft to reflect initial review |
 | 2023-01-16 | Added JSON-LD and namespace section |
+| 2023-01-16 | Add example section |
 
 
 ## Sources
