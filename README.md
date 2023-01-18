@@ -1,2 +1,98 @@
-# spec
-OpenVEX Specification
+# OpenVEX Specification
+
+OpenVEX is an implementation of the
+[Vulnerability Exploitability Exchange](https://www.ntia.gov/files/ntia/publications/vex_one-page_summary.pdf)
+(VEX for short) that is designed to be minimal, compliant, interoperable, and
+embeddable.
+
+## OpenVEX is...
+
+### A Specification
+
+OpenVEX documents are minimal JSON-LD files that capture the minimal requirements
+for VEX as defined by the VEX working group organized by CISA. The
+[OpenVEX Specification](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md)
+is owned and steered by the community.
+
+### A Go Library
+
+The project has a go library
+([openvex/go-vex](https://github.com/openvex/go-vex)) that lets projects generate,
+transform and consume OpenVEX files. It enables the ingestion of VEX metadata
+expressed in other VEX implementations.
+
+### A Set of Tools
+
+Work is underway to create the tools software authors and consumers need to
+handle VEX metadata. The current flagship project is
+[`vexctl`](https://github.com/openvex/vexctl), a CLI to create, merge and
+attest VEX documents.
+
+## What Does an OpenVEX Document Look Like?
+
+An OpenVEX document is composed of a JSON-LD structure that contains the
+[document metadata](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#vex-documents)
+and one or more
+[VEX statements](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#the-vex-statement):
+
+```json
+{
+  "@context": "https://openvex.dev/ns",
+  "@id": "https://openvex.dev/docs/example/vex-9fb3463de1b57",
+  "author": "Wolfi J Inkinson",
+  "role": "Document Creator",
+  "timestamp": "2023-01-08T18:02:03.647787998-06:00",
+  "version": "1",
+  "statements": [
+    {
+      "vulnerability": "CVE-2014-123456",
+      "products": [
+        "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
+        "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"
+      ],
+      "status": "fixed"
+    }
+  ]
+}
+```
+
+Check out
+[the OpenVEX specification](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md)
+and our [examples repository](https://github.com/openvex/examples) for more
+information and use cases.
+
+
+## Frequently Asked Questions
+
+#### How does this compare to CSAF?
+
+OpenVEX is designed to be more Lightweight, easy to be recorded in
+[Sigstore](https://sigstore.dev), and embedded in [in-toto](https://in-toto.io/)
+attestations. While CSAF has a rich mechanism to express product trees,
+OpenVEX favors [package URLs](https://github.com/package-url/purl-spec) (purl)
+as its software identifier of choice.
+
+#### How does this compare to CycloneDX VEX?
+
+OpenVEX aims to be SBOM format agnostic. While there are plans to have both
+CycloneDX and SPDX VEX implementations, we feel that VEX metadata should be
+kept separate from the SBOM.
+
+On the implementation details, the CycloneDX VEX implementation defines a
+different set of
+[status](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#status-labels) and
+[justification](https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md#status-justifications)
+labels than those defined by the VEX Working Group. To match CDX VEX documents to the unified labels documents have to be translated, which is not ideal.
+
+#### Does it work with SBOMs?
+
+Yes, OpenVEX is designed to be SBOM format agnostic. It can reference software
+described in both SPDX and CycloneDX Software Bills of Materials.
+
+#### Why not use CSAF or CycloneDX?
+
+When OpenVEX was released, both the CSAF and CycloneDX implementations of VEX
+are missing a few pieces of the minimum elements of VEX. Nevertheless, OpenVEX
+can be used along with CSAF and CycloneDX documents. The OpenVEX tooling can
+generate a complete VEX impact history from files expressed in the other
+implementations
