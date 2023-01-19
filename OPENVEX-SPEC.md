@@ -9,22 +9,6 @@ Exploitability eXchange (VEX)](http://example.com) document published on XXX
 by the VEX working group coordinated by the [Cybersecurity & Infrastructure
 Security Agency](https://www.cisa.gov/) (CISA).
 
-## About VEX
-
-Vulnerability Exploitability eXchange is a vulnerability document designed to
-complement a Software Bill of Materials (SBOM) that informs users of a software
-product about the applicability of one or more vulnerability findings.
-
-Security scanners will detect and flag components in software that have
-been identified as being vulnerable. Often, software is not necessarily affected
-as signaled by security scanners for many reasons such as: the vulnerable component may
-have been already patched, may not be present, or may not be able to be executed. To turn off
-false alerts like these, a scanner may consume VEX data from the software supplier.
-
-The extreme transparency brought by SBOMs into how software is composed will 
-most likely increase the number of these kind of false positives, requiring an
-automated solution to avoid an explosion in the false positive rate of security
-scans. Hence VEX.
 
 ## The VEX Statement
 
