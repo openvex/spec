@@ -4,6 +4,30 @@ OpenVEX is an implementation of the
 [Vulnerability Exploitability Exchange](https://www.ntia.gov/files/ntia/publications/vex_one-page_summary.pdf)
 (VEX for short) that is designed to be minimal, compliant, interoperable, and
 embeddable.
+The specification is available in the [OPENVEX-SPEC.md](OPENVEX-SPEC.md) file of this repository.
+
+OpenVEX is designed to meet the minimum requirements defined by the [CISA SBOM and VEX Efforts](https://www.cisa.gov/sbom).
+We believe OpenVEX meets these requirements now, and will do our best to ensure it continues to meet them as requirements
+change.
+
+**Note**: The OpenVEX specification is currently a draft. We don't anticipate large changes, but are open to them.
+
+## About VEX
+
+Vulnerability Exploitability eXchange is a vulnerability document designed to
+complement a Software Bill of Materials (SBOM) that informs users of a software
+product about the applicability of one or more vulnerability findings.
+
+Security scanners will detect and flag components in software that have
+been identified as being vulnerable. Often, software is not necessarily affected
+as signaled by security scanners for many reasons such as: the vulnerable component may
+have been already patched, may not be present, or may not be able to be executed. To turn off
+false alerts like these, a scanner may consume VEX data from the software supplier.
+
+The extreme transparency brought by SBOMs into how software is composed will
+most likely increase the number of these kind of false positives, requiring an
+automated solution to avoid an explosion in the false positive rate of security
+scans. Hence VEX.
 
 ## OpenVEX is...
 
@@ -61,6 +85,14 @@ Check out
 and our [examples repository](https://github.com/openvex/examples) for more
 information and use cases.
 
+## OpenVEX Roadmap
+
+The OpenVEX specification is currently a draft.
+We believe the specification is usable today, but will focus on implementation and adoption in the short term.
+We can't be fully confident the specification works until it has been implemented by a wide range of users, tools
+and systems.
+
+We're hoping for a 1.0 release in 2023.
 
 ## Frequently Asked Questions
 
@@ -96,3 +128,8 @@ are missing a few pieces of the minimum elements of VEX. Nevertheless, OpenVEX
 can be used along with CSAF and CycloneDX documents. The OpenVEX tooling can
 generate a complete VEX impact history from files expressed in the other
 implementations
+
+#### Who is behind this project?
+
+This project uses a community governance model defined in the [community repository](https://github.com/openvex/community).
+Contributions are welcome!
