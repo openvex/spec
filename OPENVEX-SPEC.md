@@ -33,13 +33,13 @@ Another key part of VEX is time. It matters _when_ statements are made. VEX is
 designed to be a sequence of statements, each overriding, but also enriching 
 the previous ones with new information. Each statement has a timestamp
 associated with it, either exlicitly in the markup or derived from containint
-structures (see [Inheritance Flow](#Inheritance Flow)).
+structures (see [Inheritance Flow](#Inheritance-Flow)).
 
 ## VEX Documents
 
 A VEX document is a data structure grouping one or more VEX statements.
 Documents also have timestamps, which may cascade down to statements (see 
-[Inheritance Flow](#Inheritance Flow)). Documents can also be versioned.
+[Inheritance Flow](#Inheritance-Flow)). Documents can also be versioned.
 
 ### A Sample Scenario
 
@@ -197,7 +197,7 @@ The following table lists the fields of the OpenVEX statement struct.
 | subcomponents | ✕ | Identifiers of components where the vulnerability originates. While the statement asserts about the impact on the software product, listing `subcomponents` let scanners find identifiers to match their findings. |
 | status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status)), some of which have further options and requirements. | 
 | status_notes | ✕ | A statement MAY convey information about how `status` was determined and MAY reference other VEX information. |
-| justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status Justifications) below for valid values. |
+| justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status-Justifications) below for valid values. |
 | impact_statement | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. An impact statement is a free form text containing a description of why the vulnerability cannot be exploited. This field is not intended to be machine readable so its use is highly discouraged for automated systems. |
 | action_statement | ✕ | For a statement with "affected" status, a VEX statement MUST include a statement that SHOULD describe actions to remediate or mitigate the vulnerability. |
 | action_statement_timestamp | ✕ | The timestamp when the action statement was issued. |
