@@ -221,7 +221,7 @@ readable justification labels and optionally enrich the statement with an
         "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7",
       ],
       "status": "not_affected",
-      "justification": "component_not_present",
+      "justification": "vulnerable_code_not_present",
       "impact_statement": "The vulnerable code was removed with a custom patch"
     }
 
