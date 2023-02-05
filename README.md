@@ -6,11 +6,29 @@ OpenVEX is an implementation of the
 embeddable.
 The specification is available in the [OPENVEX-SPEC.md](OPENVEX-SPEC.md) file of this repository.
 
-OpenVEX is designed to meet the minimum requirements defined by the [CISA SBOM and VEX Efforts](https://www.cisa.gov/sbom).
+**Note**: The OpenVEX specification is currently a draft. We don't anticipate large changes, but are open to them.
+
+## Principles
+
+OpenVEX is designed with the following principles in mind:
+
+### Meet the requirements defined by the [CISA SBOM and VEX Efforts](https://www.cisa.gov/sbom).
+
 We believe OpenVEX meets these requirements now, and will do our best to ensure it continues to meet them as requirements
 change.
 
-**Note**: The OpenVEX specification is currently a draft. We don't anticipate large changes, but are open to them.
+### SBOM Agnostic
+
+We believe VEX is most useful when decoupled from specific SBOM formats.
+
+Several SBOM formats include ways to express VEX (both within and outside of the SBOM), but we feel a single VEX format
+can be used across any SBOM format.
+Further, while we do anticipate VEX will primarily be used with SBOMs, VEX is useful without them.
+
+### Minimal
+
+OpenVEX is minimal.
+The specification is prinmarily intended to serve the use cases outlined in the CISA VEX definition.
 
 ## About VEX
 
