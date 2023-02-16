@@ -267,7 +267,7 @@ was defined by the VEX Working Group and published in the
 ## Data Inheritance
 
 VEX statements can inherit values from their document and/or, when embedded or 
-incorporated into another format, from its [encapsulating document](#encaspu).
+incorporated into another format, from its [encapsulating document](#encapsulating-document).
 
 A valid VEX statement needs to have four key data points which act as 
 the grammatical parts of a sentence:
