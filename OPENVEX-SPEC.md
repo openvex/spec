@@ -195,7 +195,7 @@ The following table lists the fields of the OpenVEX statement struct.
 | timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#Inheritance). |
 | products | ✕ | Product identifiers that the statement applies to. Any software identifier can be used and SHOULD be traceable to a described item in an SBOM. The use of [Package URLs](https://github.com/package-url/purl-spec) (purls) is recommended. While a product identifier is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
 | subcomponents | ✕ | Identifiers of components where the vulnerability originates. While the statement asserts about the impact on the software product, listing `subcomponents` let scanners find identifiers to match their findings. |
-| status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status)), some of which have further options and requirements. | 
+| status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status-Labels)), some of which have further options and requirements. |
 | status_notes | ✕ | A statement MAY convey information about how `status` was determined and MAY reference other VEX information. |
 | justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status-Justifications) below for valid values. |
 | impact_statement | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. An impact statement is a free form text containing a description of why the vulnerability cannot be exploited. This field is not intended to be machine readable so its use is highly discouraged for automated systems. |
@@ -267,7 +267,7 @@ was defined by the VEX Working Group and published in the
 ## Data Inheritance
 
 VEX statements can inherit values from their document and/or, when embedded or 
-incorporated into another format, from its [encapsulating document](#encaspu).
+incorporated into another format, from its [encapsulating document](#encapsulating-document).
 
 A valid VEX statement needs to have four key data points which act as 
 the grammatical parts of a sentence:
