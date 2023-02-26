@@ -28,7 +28,7 @@ Further, while we do anticipate VEX will primarily be used with SBOMs, VEX is us
 ### Minimal
 
 OpenVEX is minimal.
-The specification is prinmarily intended to serve the use cases outlined in the CISA VEX definition.
+The specification is primarily intended to serve the use cases outlined in the CISA VEX definition.
 
 ## About VEX
 
