@@ -4,10 +4,8 @@
 
 OpenVEX is an implementation of Vulnerability Exploitability eXchange (VEX)
 designed to be lightweight, and embeddable while meeting all requirements of
-a valid VEX implementation as defined in the [Minimum Requirements for Vulnerability
-Exploitability eXchange (VEX)](http://example.com) document published on XXX
-by the VEX working group coordinated by the [Cybersecurity & Infrastructure
-Security Agency](https://www.cisa.gov/) (CISA).
+a valid VEX implementation as defined in the [Minimum Requirements for VEX] document published on April 2023 as defined by the VEX Working Group coordinated by the [Cybersecurity & Infrastructure Security
+Agency](https://www.cisa.gov/) (CISA).
 
 
 ## The VEX Statement
@@ -258,7 +256,7 @@ why the vulnerability is not affected by reading the justification label
 associated with the VEX statement. These labels are predefined and machine-readable
 to enable automated uses such as deployment policies. The current label catalog
 was defined by the VEX Working Group and published in the 
-[Status Justifications](status-doc) document on July 2022.
+[Status Justifications] document on July 2022.
 
 
 | Label | Description |
@@ -475,12 +473,17 @@ alert and dashboards could present users with the official guidance from the pro
 
 | Date | Revision |
 | --- | --- | 
-| 2023-01-08 | First Draft of the OpenVEX Specification |
-| 2023-01-16 | Updated specx draft to reflect initial review |
-| 2023-01-16 | Added JSON-LD and namespace section |
-| 2023-01-16 | Add example section |
+| 2023-01-08 | First Draft of the OpenVEX Specification. |
+| 2023-01-16 | Updated specx draft to reflect initial review. |
+| 2023-01-16 | Added JSON-LD and namespace section. |
+| 2023-01-16 | Add example section. |
+| 2023-05-29 | Added missing fields to match the VEX-WG's [Minimum Requirements for VEX] document. |
 
 
 ## Sources
 
-status-doc: https://www.cisa.gov/sites/default/files/publications/VEX_Status_Justification_Jun22.pdf
+* Vulnerability Exploitability eXchange (VEX) - [Status Justifications]
+* [Minimum Requirements for VEX] document, published by CISA.
+
+[Status Justifications]: https://www.cisa.gov/sites/default/files/publications/VEX_Status_Justification_Jun22.pdf
+[Minimum Requirements for VEX]: https://www.cisa.gov/sites/default/files/2023-04/minimum-requirements-for-vex-508c.pdf
