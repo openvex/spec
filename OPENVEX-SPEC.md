@@ -132,7 +132,7 @@ Here is a sample of a minimal OpenVEX document:
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-08T18:02:03.647787998-06:00",
-  "version": "1",
+  "version": 1,
   "statements": [
     {
       "vulnerability": "CVE-2023-12345",
@@ -153,13 +153,14 @@ The following table lists the fields in the document struct
 
 | Field | Required | Description |
 | --- | --- | --- |
-| @context | ✓ | The URL linking to the OpenVEX context definition. Fixed to `https://openvex.dev/ns`. | 
-| @id | ✓ | The IRI identifying the VEX document.  |
-| author | ✓ | Author is the identifier for the author of the VEX statement. Ideally, a common name, may be a URI. `author` can be an individual or organization. The author identity SHOULD be cryptographically associated with the signature of the VEX  statement or document or transport. |
-| role | ✓ | role describes the role of the document author.  | 
+| @context | ✓ | The URL linking to the OpenVEX context definition. Fixed to `https://openvex.dev/ns` before 1.0 is released. | 
+| @id | ✓ | The IRI identifying the VEX document. |
+| author | ✓ | Author is the identifier for the author of the VEX statement. This field should ideally be a machine readable identifier such as an IRI, email address, etc. `author` MUST be an individual or organization. `author` identity SHOULD be cryptographically associated with the signature of the VEX document or other exchange mechanism. |
+| role | ✕ | role describes the role of the document author.  | 
 | timestamp | ✓ | Timestamp defines the time at which the document was issued. | 
-| version | ✓ | Version is the document version. It must be incremented when any content within the VEX document changes,  including any VEX statements included within the VEX document. |
-| tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It's optional. It may specify tools or automated processes used in the document or statement generation. |
+| last_updated | ✕ | Date of last modification to the document. | 
+| version | ✓ | Version is the document version. It must be incremented when any content within the VEX document changes, including any VEX statements included within the VEX document. |
+| tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It may specify tools or automated processes used in the document or statement generation. |
 | supplier | ✕ | An optional field specifying who is providing the VEX document. |
 
 ### Statement
@@ -190,12 +191,16 @@ The following table lists the fields of the OpenVEX statement struct.
 
 | Field | Required | Description |
 | --- | --- | --- |
-| vulnerability | ✓ | vulnerability SHOULD use existing and well known identifiers. For example: [CVE](https://cve.mitre.org/), [OSV](https://osv.dev/), (GHSA)[https://github.com/advisories], a supplier's vulnerability tracking system such as [RHSA](https://access.redhat.com/security/security-updates/#/) or a propietary system. It is expected that vulnerability identification systems are external to and maintained separately from VEX.<br>vulnerability MAY be URIs or URLs.<br>vulnerability  MAY be arbitrary and MAY be created by the VEX statement `author`.
+| @id | ✕ | Optional IRI identifying the statement to make it externally referenceable. |
+| version | ✕ | Optional integer representing the statement's version number. Defaults to zero, required when incremented. |
+| vulnerability | ✓ | Vulnerability SHOULD use existing and well known identifiers. For example: [CVE](https://cve.mitre.org/), [OSV](https://osv.dev/), [GHSA](https://github.com/advisories), a supplier's vulnerability tracking system such as [RHSA](https://access.redhat.com/security/security-updates/#/) or a propietary system. It is expected that vulnerability identification systems are external to and maintained separately from VEX.<br>`vulnerability` MAY be an IRI and MAY be arbitrary, created by the VEX document `author`. |
 | vuln_description | ✕ | Optional free-form text describing the vulnerability | 
 | timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#Inheritance). |
+| last_updated | ✕ | Timestamp when the statement was last updated. |
 | products | ✕ | Product identifiers that the statement applies to. Any software identifier can be used and SHOULD be traceable to a described item in an SBOM. The use of [Package URLs](https://github.com/package-url/purl-spec) (purls) is recommended. While a product identifier is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
 | subcomponents | ✕ | Identifiers of components where the vulnerability originates. While the statement asserts about the impact on the software product, listing `subcomponents` let scanners find identifiers to match their findings. |
-| status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status-Labels)), some of which have further options and requirements. |
+| status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status-Labels)), some of which have further options and requirements. | 
+| supplier | ✕ | Supplier of the product or subcomponent. |
 | status_notes | ✕ | A statement MAY convey information about how `status` was determined and MAY reference other VEX information. |
 | justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status-Justifications) below for valid values. |
 | impact_statement | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. An impact statement is a free form text containing a description of why the vulnerability cannot be exploited. This field is not intended to be machine readable so its use is highly discouraged for automated systems. |
@@ -333,7 +338,7 @@ example, the sole statement has its timestamp data derived from the document:
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-08T18:02:03-06:00",
-  "version": "1",
+  "version": 1,
   "statements": [
     {
       "vulnerability": "CVE-2023-12345",
@@ -358,7 +363,7 @@ to avoid duplication:
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-09T09:08:42-06:00",
-  "version": "1",
+  "version": 1,
   "statements": [
     {
       "timestamp": "2023-01-08T18:02:03-06:00",
@@ -448,7 +453,7 @@ the project could issue an OpenVEX document as follows:
   "author": "Spring Builds <spring-builds@users.noreply.github.com>",
   "role": "Project Release Bot",
   "timestamp": "2023-01-16T19:07:16.853479631-06:00",
-  "version": "1",
+  "version": 1,
   "statements": [
     {
       "vulnerability": "CVE-2021-44228",
