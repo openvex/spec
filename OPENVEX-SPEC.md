@@ -159,7 +159,6 @@ The following table lists the fields in the document struct
 | last_updated | ✕ | Date of last modification to the document. | 
 | version | ✓ | Version is the document version. It must be incremented when any content within the VEX document changes, including any VEX statements included within the VEX document. |
 | tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It may specify tools or automated processes used in the document or statement generation. |
-| supplier | ✕ | An optional field specifying who is providing the VEX document. |
 
 ### Statement
 
@@ -473,6 +472,8 @@ alert and dashboards could present users with the official guidance from the pro
 
 | Date | Revision |
 | --- | --- | 
+| 2023-06-01 | Removed supplier from the document level (following VEX-WG doc). |
+| 2023-05-29 | Specification updated to reflect the published [Minimum Requirements for VEX] document. |
 | 2023-01-08 | First Draft of the OpenVEX Specification. |
 | 2023-01-16 | Updated specx draft to reflect initial review. |
 | 2023-01-16 | Added JSON-LD and namespace section. |
