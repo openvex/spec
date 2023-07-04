@@ -5,10 +5,11 @@
 OpenVEX is an implementation of Vulnerability Exploitability eXchange (VEX)
 designed to be lightweight, and embeddable while meeting all requirements of
 a valid VEX implementation as defined in the [Minimum Requirements for Vulnerability
-Exploitability eXchange (VEX)](http://example.com) document published on XXX
+Exploitability eXchange (VEX)][vex-requirements] document published on 21 April 2023
 by the VEX working group coordinated by the [Cybersecurity & Infrastructure
 Security Agency](https://www.cisa.gov/) (CISA).
 
+[vex-requirements]: https://www.cisa.gov/sites/default/files/2023-04/minimum-requirements-for-vex-508c.pdf
 
 ## The VEX Statement
 
