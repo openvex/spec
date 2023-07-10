@@ -1,0 +1,71 @@
+{
+  "xsd": "http://www.w3.org/2001/XMLSchema#",
+  "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+  "openvex": "https://openvex.dev/ns/v1#",
+  "author": {
+    "@id": "openvex:author",
+    "@type": "xsd:string"
+  },
+  "role": {
+    "@id": "openvex:role",
+    "@type": "xsd:string"
+  },
+  "version": {
+    "@id": "openvex:author",
+    "@type": "xsd:stringOrNumber"
+  },
+  "status": {
+    "@type": "openvex:vexStatus",
+    "@id": "openvex:status"
+  },
+  "timestamp": {
+    "@type": "xsd:dateTime",
+    "@id": "openvex:timestamp"
+  },
+  "name": {
+    "@type": "xsd:string",
+    "@id": "openvex:vulnName"
+  },
+  "hashes": {
+    "@id": "openvex:hash",
+    "@type": "openvex:hashString",
+    "@container": "@index"
+  },
+  "identifiers": {
+    "@id": "openvex:identifier",
+    "@type": "openvex:softwareIdentifier",
+    "@container": "@index"
+  },
+  "statements": {
+    "@container": "@list",
+    "@id": "openvex:statement",
+    "@context": {
+      "vulnerability": {
+        "@id": "openvex:vulnerability",
+        "@context": {
+          "name": {
+            "@id": "openvex:name",
+            "@type": "openvex:vulnName"
+          },
+          "aliases": {
+            "@id": "openvex:alias",
+            "@type": "openvex:vulnName",
+            "@container": "@list"
+          }
+        }
+      },
+      "products": {
+        "@id": "openvex:product",
+        "@type": "openvex:component",
+        "@container": "@list",
+        "@context": {
+          "subcomponents": {
+            "@id": "openvex:subcomponent",
+            "@type": "openvex:component",
+            "@container": "@list"
+          }
+        }
+      }
+    }
+  }
+}
