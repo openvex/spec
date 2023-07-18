@@ -1,4 +1,4 @@
-# OpenVEX Specification v0.0.0
+# OpenVEX Specification v0.0.2
 
 ## Overview
 
@@ -472,6 +472,7 @@ alert and dashboards could present users with the official guidance from the pro
 
 | Date | Revision |
 | --- | --- | 
+| 2023-07-18 | Bumped version of the spec to v0.0.2 after update to meet the VEX-WG doc. |
 | 2023-06-01 | Removed supplier from the document level (following VEX-WG doc). |
 | 2023-05-29 | Specification updated to reflect the published [Minimum Requirements for VEX] document. |
 | 2023-01-08 | First Draft of the OpenVEX Specification. |
