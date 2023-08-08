@@ -1,4 +1,4 @@
-# OpenVEX Specification v0.0.2
+# OpenVEX Specification v0.2.0
 
 ## Overview
 
@@ -631,7 +631,7 @@ in the product data structure.
 
 | Date | Revision |
 | --- | --- | 
-| 2023-07-18 | Added hash and identifier tables |
+| 2023-07-18 | Added hash and identifier label catalog tables |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field](https://github.com/openvex/community/blob/main/enhancements/opev-0015.md) |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field](https://github.com/openvex/community/blob/main/enhancements/opev-0014.md) |
 | 2023-07-18 | Bumped version of the spec to v0.0.2 after update to meet the VEX-WG doc. |
