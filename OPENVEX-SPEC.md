@@ -594,10 +594,44 @@ the project could issue an OpenVEX document as follows:
 VEX-enabled security scanners could use the vex document to turn off the security
 alert and dashboards could present users with the official guidance from the project.
 
+## Appendix A: Hash Names Table
+
+The following list of hash names can be used as keys in the `hashes` field of the
+product field. These labels follow and extend the
+[Hash Function Textual Names](https://www.iana.org/assignments/named-information/named-information.xhtml)
+document from IANA.
+
+| Hash Label |
+| --- |
+| md5 |
+| sha1 |
+| sha-256 |
+| sha-384 |
+| sha-512 |
+| sha3-224 |
+| sha3-256 |
+| sha3-384 |
+| sha3-512 |
+| blake2s-256 |
+| blake2b-256 |
+| blake2b-512 |
+
+## Appendix B: Software Identifier Types Table
+
+The following labels can be used as keys when enumerating software identifiers
+in the product data structure.
+
+| Type Label | Identifier type | 
+| --- | --- |
+| purl | [Package URL](https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst) |
+|	cpe22 | [Common Platform Enumeration v2.2](https://cpe.mitre.org/files/cpe-specification_2.2.pdf) |
+| cpe23 | [Common Platform Enumeration v2.3](https://csrc.nist.gov/pubs/ir/7695/final) |
+
 ## Revisions 
 
 | Date | Revision |
 | --- | --- | 
+| 2023-07-18 | Added hash and identifier tables |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field](https://github.com/openvex/community/blob/main/enhancements/opev-0015.md) |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field](https://github.com/openvex/community/blob/main/enhancements/opev-0014.md) |
 | 2023-07-18 | Bumped version of the spec to v0.0.2 after update to meet the VEX-WG doc. |
