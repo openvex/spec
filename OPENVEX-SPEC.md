@@ -4,8 +4,9 @@
 
 OpenVEX is an implementation of Vulnerability Exploitability eXchange (VEX)
 designed to be lightweight, and embeddable while meeting all requirements of
-a valid VEX implementation as defined in the [Minimum Requirements for VEX] document published on April 2023 as defined by the VEX Working Group coordinated by the [Cybersecurity & Infrastructure Security
-Agency](https://www.cisa.gov/) (CISA).
+a valid VEX implementation as defined in the [Minimum Requirements for VEX]
+document published on April 2023 as defined by the VEX Working Group coordinated
+by the [Cybersecurity & Infrastructure Security Agency](https://www.cisa.gov/) (CISA).
 
 
 ## The VEX Statement
@@ -133,7 +134,9 @@ Here is a sample of a minimal OpenVEX document:
   "version": 1,
   "statements": [
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"}
@@ -172,7 +175,9 @@ A statement in an OpenVEX document looks like the following snippet:
 ```json
   "statements": [
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"}
@@ -190,8 +195,7 @@ The following table lists the fields of the OpenVEX statement struct.
 | --- | --- | --- |
 | @id | ✕ | Optional IRI identifying the statement to make it externally referenceable. |
 | version | ✕ | Optional integer representing the statement's version number. Defaults to zero, required when incremented. |
-| vulnerability | ✓ | Vulnerability SHOULD use existing and well known identifiers. For example: [CVE](https://cve.mitre.org/), [OSV](https://osv.dev/), [GHSA](https://github.com/advisories), a supplier's vulnerability tracking system such as [RHSA](https://access.redhat.com/security/security-updates/#/) or a propietary system. It is expected that vulnerability identification systems are external to and maintained separately from VEX.<br>`vulnerability` MAY be an IRI and MAY be arbitrary, created by the VEX document `author`. |
-| vuln_description | ✕ | Optional free-form text describing the vulnerability | 
+| vulnerability | ✓ | A struct identifying the vulnerability. See the [Vulnerability Data Structure] section below for the complete data structure reference. |
 | timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#Inheritance). |
 | last_updated | ✕ | Timestamp when the statement was last updated. |
 | products | ✕ | List of product structs that the statement applies to. See the [Product Data Structure] section below for the full description. While a product is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
@@ -217,7 +221,9 @@ readable justification labels and optionally enrich the statement with an
 
 ```json
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345",
+      }
       "products": [
         {"@id": "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7"}
       ],
@@ -284,6 +290,49 @@ each itself a `component` subclass:
 | Field | Required | Description |
 | --- | --- | --- |
 | subcomponents | ✕ | List of `component` structs describing the subcomponents subject of the VEX statement. |
+
+### Vulnerability Data Structure
+
+The vulnerability field in an OpenVEX statement takes the value of a struct that
+has the capability to enumerate the vulnerability name and other aliases that may
+be used to track it in different databases and systems.
+
+As with the product field, the vulberability has an optional "@id" field that
+takes an IRI to make the field referenceable in the document and linkable from
+other linked data resources.
+
+#### Example Vulnerability Struct
+
+```json
+{
+  "vulnerability": {
+    "@id": "https://nvd.nist.gov/vuln/detail/CVE-2019-17571",
+    "name": "CVE-2019-17571",
+    "description": "The product deserializes untrusted data without sufficiently verifying that the resulting data will be valid.",
+    "aliases": [
+        "GHSA-2qrg-x229-3v8q",
+        "openSUSE-SU-2020:0051-1",
+        "SNYK-RHEL7-LOG4J-1472071",
+        "DSA-4686-1",
+        "USN-4495",
+        "DLA-2065-1",
+    ],
+  }
+}
+```
+
+#### Vulnerability Struct Fields
+
+The only required field in the vulnerability field is `name`, the main identifier
+of the vulnerability. Note that it is not an error to include the identifier used
+in the `name` field in the list of aliases.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| @id | ✕ | An Internationalized Resource Identifier (IRI) identifying the struct. Used to reference and link the vulnerability data. |
+| name | ✓ | A string with the main identifier used to name the vulnerability. |
+| description | ✕ | Optional free form text describing the vulnerability. |
+| aliases | x | A list of strings enumerating other names under which the vulnerability may be known. |
 
 ### Status Labels
 
@@ -394,7 +443,9 @@ example, the sole statement has its timestamp data derived from the document:
   "version": 1,
   "statements": [
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"}
       ],
@@ -420,14 +471,18 @@ to avoid duplication:
   "statements": [
     {
       "timestamp": "2023-01-08T18:02:03-06:00",
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
       ],
       "status": "under_investigation"
     },
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"}
       ],
@@ -509,7 +564,14 @@ the project could issue an OpenVEX document as follows:
   "version": 1,
   "statements": [
     {
-      "vulnerability": "CVE-2021-44228",
+      "vulnerability": {
+        "@id": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+        "name": "CVE-2021-44228",
+        "description": "Remote code injection in Log4j",
+        "aliases": [
+          "GHSA-jfh8-c2jp-5v3q"
+        ]
+      },
       "products": [
         {
           "@id": "pkg:maven/org.springframework.boot/spring-boot@2.6.0-M3",
@@ -536,6 +598,7 @@ alert and dashboards could present users with the official guidance from the pro
 
 | Date | Revision |
 | --- | --- | 
+| 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field](https://github.com/openvex/community/blob/main/enhancements/opev-0015.md) |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field](https://github.com/openvex/community/blob/main/enhancements/opev-0014.md) |
 | 2023-07-18 | Bumped version of the spec to v0.0.2 after update to meet the VEX-WG doc. |
 | 2023-06-01 | Removed supplier from the document level (following VEX-WG doc). |
