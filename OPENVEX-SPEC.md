@@ -1,11 +1,12 @@
-# OpenVEX Specification v0.0.2
+# OpenVEX Specification v0.2.0
 
 ## Overview
 
 OpenVEX is an implementation of Vulnerability Exploitability eXchange (VEX)
 designed to be lightweight, and embeddable while meeting all requirements of
-a valid VEX implementation as defined in the [Minimum Requirements for VEX] document published on April 2023 as defined by the VEX Working Group coordinated by the [Cybersecurity & Infrastructure Security
-Agency](https://www.cisa.gov/) (CISA).
+a valid VEX implementation as defined in the [Minimum Requirements for VEX]
+document published on April 2023 as defined by the VEX Working Group coordinated
+by the [Cybersecurity & Infrastructure Security Agency](https://www.cisa.gov/) (CISA).
 
 
 ## The VEX Statement
@@ -110,8 +111,8 @@ expected to flow.
 #### Subcomponent
 
 Any components possibly included in the product where the vulnerability originates.
-The subcomponents SHOULD also be software identifiers and they SHOULD also be
-listed in the product SBOM. subcomponents will most often be one or more of the
+The subcomponents SHOULD also list software identifiers and they SHOULD also be
+listed in the product SBOM. `subcomponents` will most often be one or more of the
 product's dependencies.
 
 ### Document
@@ -133,10 +134,12 @@ Here is a sample of a minimal OpenVEX document:
   "version": 1,
   "statements": [
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7",
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"}
       ],
       "status": "fixed"
     }
@@ -172,10 +175,12 @@ A statement in an OpenVEX document looks like the following snippet:
 ```json
   "statements": [
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7",
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=x86_64"}
       ],
       "status": "fixed"
     }
@@ -190,12 +195,10 @@ The following table lists the fields of the OpenVEX statement struct.
 | --- | --- | --- |
 | @id | ✕ | Optional IRI identifying the statement to make it externally referenceable. |
 | version | ✕ | Optional integer representing the statement's version number. Defaults to zero, required when incremented. |
-| vulnerability | ✓ | Vulnerability SHOULD use existing and well known identifiers. For example: [CVE](https://cve.mitre.org/), [OSV](https://osv.dev/), [GHSA](https://github.com/advisories), a supplier's vulnerability tracking system such as [RHSA](https://access.redhat.com/security/security-updates/#/) or a propietary system. It is expected that vulnerability identification systems are external to and maintained separately from VEX.<br>`vulnerability` MAY be an IRI and MAY be arbitrary, created by the VEX document `author`. |
-| vuln_description | ✕ | Optional free-form text describing the vulnerability | 
+| vulnerability | ✓ | A struct identifying the vulnerability. See the [Vulnerability Data Structure] section below for the complete data structure reference. |
 | timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#Inheritance). |
 | last_updated | ✕ | Timestamp when the statement was last updated. |
-| products | ✕ | Product identifiers that the statement applies to. Any software identifier can be used and SHOULD be traceable to a described item in an SBOM. The use of [Package URLs](https://github.com/package-url/purl-spec) (purls) is recommended. While a product identifier is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
-| subcomponents | ✕ | Identifiers of components where the vulnerability originates. While the statement asserts about the impact on the software product, listing `subcomponents` let scanners find identifiers to match their findings. |
+| products | ✕ | List of product structs that the statement applies to. See the [Product Data Structure] section below for the full description. While a product is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
 | status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status-Labels)), some of which have further options and requirements. | 
 | supplier | ✕ | Supplier of the product or subcomponent. |
 | status_notes | ✕ | A statement MAY convey information about how `status` was determined and MAY reference other VEX information. |
@@ -218,9 +221,11 @@ readable justification labels and optionally enrich the statement with an
 
 ```json
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345",
+      }
       "products": [
-        "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7",
+        {"@id": "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7"}
       ],
       "status": "not_affected",
       "justification": "component_not_present",
@@ -228,6 +233,106 @@ readable justification labels and optionally enrich the statement with an
     }
 
 ```
+
+### Product Data Structure
+
+The subject of an VEX statement is the _product_, a piece of software that MUST be
+addressable via one of the mechanisms offered by OpenVEX. The spec provides an
+expressive `product` struct with fields to address the product using identifiers,
+hashes. Note that all mechanisms to address the product are optional but a 
+valid statement MUST identify a product to be valid.
+
+The optional `@id` field takes an [IRI](#IRI) to make the product referenceable
+inside the document and addressable externally. As Package URLs are valid IRIs,
+the `@id` can take a purl as a value.
+
+The product field should list as many software identifiers as possible to
+help VEX processors when matching the product. The use of
+[Package URLs](https://github.com/package-url/purl-spec) (purls) is recommended. 
+
+The product and its subcomponents fields share an abstract type called
+`Component` that defines the fields that can be used to identify them.
+The only difference in `product` is the nested `subcomponents` field.
+
+#### Example Product Struct
+
+```json
+{
+  "@id": "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7",
+  "identifiers": {
+    "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.4",
+    "cpe23": "cpe:2.3:a:apache:log4j:2.4:-:*:*:*:*:*:*",
+    "cpe22": "cpe:/a:apache:log4j:2.4:-",
+  },
+  "hashes": {
+    "sha-256": "402fa523b96591d4450ace90e32d9f779fcfd938903e1c5bf9d3701860b8f856",
+    "sha-512": "d2eb65b083923d90cf55111c598f81d3d9c66f4457dfd173f01a6b7306f3b222541be42a35fe47191a9ca00e017533e8c07ca192bd22954e125557c72d2a3178"
+  },
+  "subcomponents": []
+}
+
+```
+
+
+#### Component Fields
+
+These fields are shared by both the `product` and `subcomponent` structs:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| @id | ✕ | Optional [IRI](#IRI) identifying the component to make it externally referenceable. |
+| identifiers | ✕ | A map of software identifiers where the key is the type and the value the identifier. OpenVEX favors the use of purl but others are recognized (see the Identifiers Labels table below) |
+| hashes | ✕ | Map of cryptographic hashes of the component. The key is the algorithm name based on the [Hash Function Textual Names](https://www.iana.org/assignments/named-information/named-information.xhtml) from IANA. See [Hash Names Table] for the full supported list. |
+
+The `product` struct uses the above listed fields but has a list of subcomponents,
+each itself a `component` subclass:
+
+| Field | Required | Description |
+| --- | --- | --- |
+| subcomponents | ✕ | List of `component` structs describing the subcomponents subject of the VEX statement. |
+
+### Vulnerability Data Structure
+
+The vulnerability field in an OpenVEX statement takes the value of a struct that
+has the capability to enumerate the vulnerability name and other aliases that may
+be used to track it in different databases and systems.
+
+As with the product field, the vulberability has an optional "@id" field that
+takes an IRI to make the field referenceable in the document and linkable from
+other linked data resources.
+
+#### Example Vulnerability Struct
+
+```json
+{
+  "vulnerability": {
+    "@id": "https://nvd.nist.gov/vuln/detail/CVE-2019-17571",
+    "name": "CVE-2019-17571",
+    "description": "The product deserializes untrusted data without sufficiently verifying that the resulting data will be valid.",
+    "aliases": [
+        "GHSA-2qrg-x229-3v8q",
+        "openSUSE-SU-2020:0051-1",
+        "SNYK-RHEL7-LOG4J-1472071",
+        "DSA-4686-1",
+        "USN-4495",
+        "DLA-2065-1",
+    ],
+  }
+}
+```
+
+#### Vulnerability Struct Fields
+
+The only required field in the vulnerability field is `name`, the main identifier
+of the vulnerability. Note that it is not an error to include the identifier used
+in the `name` field in the list of aliases.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| @id | ✕ | An Internationalized Resource Identifier (IRI) identifying the struct. Used to reference and link the vulnerability data. |
+| name | ✓ | A string with the main identifier used to name the vulnerability. |
+| description | ✕ | Optional free form text describing the vulnerability. |
+| aliases | x | A list of strings enumerating other names under which the vulnerability may be known. |
 
 ### Status Labels
 
@@ -338,9 +443,11 @@ example, the sole statement has its timestamp data derived from the document:
   "version": 1,
   "statements": [
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7",
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"}
       ],
       "status": "under_investigation"
     }
@@ -364,16 +471,20 @@ to avoid duplication:
   "statements": [
     {
       "timestamp": "2023-01-08T18:02:03-06:00",
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7",
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
       ],
       "status": "under_investigation"
     },
     {
-      "vulnerability": "CVE-2023-12345",
+      "vulnerability": {
+        "name": "CVE-2023-12345"
+      },
       "products": [
-        "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7",
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"}
       ],
       "status": "fixed"
     },
@@ -403,7 +514,7 @@ processors.
 
 ### Public IRI Namespaces
 
-As all documents are required to be identified by an IRI, open vex defines a 
+As all documents are required to be identified by an IRI, OpenVEX defines a 
 public namespace that can be used by documents. Users of OpenVEX MAY choose to
 use the shared namespace.
 
@@ -420,7 +531,7 @@ There are two reserved shared namespaces with special meanings:
 
 - `public` this is a public shared name where anybody that needs a valid IRI can
 issue identifiers. Only recommended for demos or experiments where name collisions
-don't matter.
+do not matter.
 - `example` a namespace for documentation, demos or other uses where no systems
 are expected to run.
 
@@ -453,9 +564,24 @@ the project could issue an OpenVEX document as follows:
   "version": 1,
   "statements": [
     {
-      "vulnerability": "CVE-2021-44228",
+      "vulnerability": {
+        "@id": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+        "name": "CVE-2021-44228",
+        "description": "Remote code injection in Log4j",
+        "aliases": [
+          "GHSA-jfh8-c2jp-5v3q"
+        ]
+      },
       "products": [
-        "pkg:maven/org.springframework.boot/spring-boot@2.6.0"
+        {
+          "@id": "pkg:maven/org.springframework.boot/spring-boot@2.6.0-M3",
+          "identifiers": {
+            "purl": "pkg:maven/org.springframework.boot/spring-boot@2.6.0-M3",
+          }
+          "hashes":{
+            "sha-256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        }
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path"
@@ -468,10 +594,46 @@ the project could issue an OpenVEX document as follows:
 VEX-enabled security scanners could use the vex document to turn off the security
 alert and dashboards could present users with the official guidance from the project.
 
+## Appendix A: Hash Names Table
+
+The following list of hash names can be used as keys in the `hashes` field of the
+product field. These labels follow and extend the
+[Hash Function Textual Names](https://www.iana.org/assignments/named-information/named-information.xhtml)
+document from IANA.
+
+| Hash Label |
+| --- |
+| md5 |
+| sha1 |
+| sha-256 |
+| sha-384 |
+| sha-512 |
+| sha3-224 |
+| sha3-256 |
+| sha3-384 |
+| sha3-512 |
+| blake2s-256 |
+| blake2b-256 |
+| blake2b-512 |
+
+## Appendix B: Software Identifier Types Table
+
+The following labels can be used as keys when enumerating software identifiers
+in the product data structure.
+
+| Type Label | Identifier type | 
+| --- | --- |
+| purl | [Package URL](https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst) |
+|	cpe22 | [Common Platform Enumeration v2.2](https://cpe.mitre.org/files/cpe-specification_2.2.pdf) |
+| cpe23 | [Common Platform Enumeration v2.3](https://csrc.nist.gov/pubs/ir/7695/final) |
+
 ## Revisions 
 
 | Date | Revision |
 | --- | --- | 
+| 2023-07-18 | Added hash and identifier label catalog tables |
+| 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field](https://github.com/openvex/community/blob/main/enhancements/opev-0015.md) |
+| 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field](https://github.com/openvex/community/blob/main/enhancements/opev-0014.md) |
 | 2023-07-18 | Bumped version of the spec to v0.0.2 after update to meet the VEX-WG doc. |
 | 2023-06-01 | Removed supplier from the document level (following VEX-WG doc). |
 | 2023-05-29 | Specification updated to reflect the published [Minimum Requirements for VEX] document. |
@@ -489,3 +651,4 @@ alert and dashboards could present users with the official guidance from the pro
 
 [Status Justifications]: https://www.cisa.gov/sites/default/files/publications/VEX_Status_Justification_Jun22.pdf
 [Minimum Requirements for VEX]: https://www.cisa.gov/sites/default/files/2023-04/minimum-requirements-for-vex-508c.pdf
+[IRI]: https://www.ietf.org/rfc/rfc3987.txt
