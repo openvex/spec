@@ -4,11 +4,11 @@
 
 An attestation is an assertion made about a piece of software. There are many
 kinds of attestations in use today such as provenance attestation defined by
-SLSA or those asserting to the results of vulnerability scans. 
+SLSA or those asserting to the results of vulnerability scans.
 
-OpenVEX was conceived to be able to be embedded in 
+OpenVEX was conceived to be able to be embedded in
 [in-toto attestations](https://github.com/in-toto/attestation). The format defined
-by the in-toto project is composed of a number of subjects (the pieces of 
+by the in-toto project is composed of a number of subjects (the pieces of
 software the attestation is talking about) and a predicate that defines what is
 being said about the subjects.
 
@@ -20,7 +20,7 @@ Here is an example of an empty attestation
 {
   "_type": "https://in-toto.io/Statement/v0.1",
   "predicateType": "",
-  "subject": [], 
+  "subject": [],
   "predicate": {}
 }
 ```
@@ -30,21 +30,21 @@ Here is an example of an empty attestation
 OpenVEX documents are designed to be embeddable in other formats. This is not a
 unique feature of OpenVEX: the VEX minimum elements define the notion of an
 "encapsulating format", a document that contains the VEX document and its
-statements. VEX also defines an inheritance model where the required data to 
-complete VEX metadata cascades down from the encapsulating format to the 
+statements. VEX also defines an inheritance model where the required data to
+complete VEX metadata cascades down from the encapsulating format to the
 document, to the statement. This allows VEX to leverage the capabilities of the
 encapsulating formats while defining a compatibility flow among implementations.
 
 OpenVEX documents do not require an encapsulating document. Nevertheless, they
 were designed to be embeddable and they can be used as in-toto predicates. This
-lets software authors assert VEX data about a piece of software. 
+lets software authors assert VEX data about a piece of software.
 
 When embedding OpenVEX in attestations, the only field of data that "cascades"
-is the VEX statement's `product`, or `subject` in in-toto lingo. 
+is the VEX statement's `product`, or `subject` in in-toto lingo.
 
 ### The VEX Product and the Attestation's Subject
 
-In VEX, all statements apply to one or more products. A "product" in VEX is a 
+In VEX, all statements apply to one or more products. A "product" in VEX is a
 loose term meaning any piece of software that can be listed in an SBOM. For a
 statement to be valid, it needs to have one or more statements. Here's an example
 of a VEX statement:
@@ -137,7 +137,7 @@ embedded OpenVEX document:
 ```
 
 Note in the finished example how the products in the statement have moved
-toward the attestation's subject section. This example assumes that the 
+toward the attestation's subject section. This example assumes that the
 subjects' digests can be computed externally.
 
 The product entries MAY remain in the VEX statement. In that case, they MUST
@@ -169,7 +169,7 @@ model that can host any number of statements, possibly with different subjects:
 ]
 ```
 
-The nature of the data models implies that an attestation can only refer to 
+The nature of the data models implies that an attestation can only refer to
 VEX statements that contain one or more of the `subject` entries in their product
 section. To attest the example above, an attestation can use any of the following
 subject structs:
@@ -218,4 +218,3 @@ exploring the same product, this may not be possible in all circumstances.
 An identity signing an attestation containing VEX statements from third parties
 implies that the signer trusts those statements and has decided to include them
 in the VEX impact history.
-
