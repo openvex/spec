@@ -6,15 +6,14 @@ OpenVEX is an implementation of Vulnerability Exploitability eXchange (VEX)
 designed to be lightweight, and embeddable while meeting all requirements of
 a valid VEX implementation as defined in the [Minimum Requirements for VEX]
 document published on April 2023 as defined by the VEX Working Group coordinated
-by the [Cybersecurity & Infrastructure Security Agency](https://www.cisa.gov/) (CISA).
-
+by the [Cybersecurity & Infrastructure Security Agency][CISA] (CISA).
 
 ## The VEX Statement
 
 VEX centers on the notion of a _statement_. In short, a statement can be defined
 as an assertion intersecting product, a vulnerability, and an impact status:
 
-```
+```text
    statement = product(s)             + vulnerability              + status
                │                        │                            │
                └ The software product   └ Typically a CVE related    └ One of the impact
@@ -23,22 +22,22 @@ as an assertion intersecting product, a vulnerability, and an impact status:
 ```
 
 The `product` is a piece of software that can be correlated to an entry in an
-SBOM (see [Product](#Product) below). `vulnerability` is the ID of a security 
+SBOM (see [Product](#product) below). `vulnerability` is the ID of a security
 vulnerability as understood by scanners, which can be looked up in a vulnerability
 tracking system. `status` is one of the impact status labels defined by VEX
-(see [Status](#Status)).
+(see [Status](#status)).
 
 Another key part of VEX is time. It matters _when_ statements are made. VEX is
-designed to be a sequence of statements, each overriding, but also enriching 
+designed to be a sequence of statements, each overriding, but also enriching
 the previous ones with new information. Each statement has a timestamp
-associated with it, either exlicitly in the markup or derived from containint
-structures (see [Inheritance Flow](#Inheritance-Flow)).
+associated with it, either explicitly in the markup or derived from containing
+structures (see [Inheritance Flow](#inheritance-flow)).
 
 ## VEX Documents
 
 A VEX document is a data structure grouping one or more VEX statements.
-Documents also have timestamps, which may cascade down to statements (see 
-[Inheritance Flow](#Inheritance-Flow)). Documents can also be versioned.
+Documents also have timestamps, which may cascade down to statements (see
+[Inheritance Flow](#inheritance-flow)). Documents can also be versioned.
 
 ### A Sample Scenario
 
@@ -65,23 +64,23 @@ document and stop alerting about the CVE as it no longer impacts the product.
 
 ## OpenVEX Specification
 
-### Definitions 
+### Definitions
 
 The following definitions are used throughout this document.
 
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" are to be interpreted as
-described in [RFC2119](https://www.ietf.org/rfc/rfc2119.txt).
+described in [RFC2119].
 
 #### Document
 
 A data structure that groups together one or more VEX statements. A document
-MUST define a timestamp to express when it was issued. 
+MUST define a timestamp to express when it was issued.
 
 #### Encapsulating Document
 
 While OpenVEX defines a self-sustaining document format, VEX data can often be
-found embedded or incorporated in other formats, examples of this include 
+found embedded or incorporated in other formats, examples of this include
 in-toto attestations or CSAF and CycloneDX documents. "Encapsulating document"
 refers to these formats that can contain VEX data.
 
@@ -89,7 +88,7 @@ refers to these formats that can contain VEX data.
 
 A logical unit representing a piece of software. The concept is intentionally
 broad to allow for a wide variety of use cases but generally speaking, anything
-that can be described in a Software Bill of Materials (SBOM) can be thought of 
+that can be described in a Software Bill of Materials (SBOM) can be thought of
 as a product.
 
 #### Status
@@ -118,7 +117,7 @@ product's dependencies.
 ### Document
 
 A VEX document consists of two parts: The document metadata and a collection
-of statements. Some fields in the document metadata are required. 
+of statements. Some fields in the document metadata are required.
 
 OpenVEX documents are serialized in json-ld structs. File encoding MUST be UTF8.
 
@@ -154,12 +153,12 @@ The following table lists the fields in the document struct
 
 | Field | Required | Description |
 | --- | --- | --- |
-| @context | ✓ | The URL linking to the OpenVEX context definition. Fixed to `https://openvex.dev/ns` before 1.0 is released. | 
+| @context | ✓ | The URL linking to the OpenVEX context definition. Fixed to `https://openvex.dev/ns` before 1.0 is released. |
 | @id | ✓ | The IRI identifying the VEX document. |
 | author | ✓ | Author is the identifier for the author of the VEX statement. This field should ideally be a machine readable identifier such as an IRI, email address, etc. `author` MUST be an individual or organization. `author` identity SHOULD be cryptographically associated with the signature of the VEX document or other exchange mechanism. |
-| role | ✕ | role describes the role of the document author.  | 
-| timestamp | ✓ | Timestamp defines the time at which the document was issued. | 
-| last_updated | ✕ | Date of last modification to the document. | 
+| role | ✕ | role describes the role of the document author.  |
+| timestamp | ✓ | Timestamp defines the time at which the document was issued. |
+| last_updated | ✕ | Date of last modification to the document. |
 | version | ✓ | Version is the document version. It must be incremented when any content within the VEX document changes, including any VEX statements included within the VEX document. |
 | tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It may specify tools or automated processes used in the document or statement generation. |
 
@@ -195,21 +194,21 @@ The following table lists the fields of the OpenVEX statement struct.
 | --- | --- | --- |
 | @id | ✕ | Optional IRI identifying the statement to make it externally referenceable. |
 | version | ✕ | Optional integer representing the statement's version number. Defaults to zero, required when incremented. |
-| vulnerability | ✓ | A struct identifying the vulnerability. See the [Vulnerability Data Structure] section below for the complete data structure reference. |
-| timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#Inheritance). |
+| vulnerability | ✓ | A struct identifying the vulnerability. See the [Vulnerability Data Structure](#vulnerability-data-structure) section below for the complete data structure reference. |
+| timestamp | ✕ | Timestamp is the time at which the information expressed in the Statement was known to be true. Cascades down from the document, see [Inheritance](#inheritance-flow). |
 | last_updated | ✕ | Timestamp when the statement was last updated. |
-| products | ✕ | List of product structs that the statement applies to. See the [Product Data Structure] section below for the full description. While a product is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#Inheritance). |
-| status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#Status-Labels)), some of which have further options and requirements. | 
+| products | ✕ | List of product structs that the statement applies to. See the [Product Data Structure](#product-data-structure) section below for the full description. While a product is required to have a complete statement, this field is optional as it can cascade down from the encapsulating document, see [Inheritance](#inheritance-flow). |
+| status | ✓ | A VEX statement MUST provide the status of the vulnerabilities with respect to the products and components listed in the statement. `status` MUST be one of the labels defined by VEX (see [Status](#status-labels)), some of which have further options and requirements. |
 | supplier | ✕ | Supplier of the product or subcomponent. |
 | status_notes | ✕ | A statement MAY convey information about how `status` was determined and MAY reference other VEX information. |
-| justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#Status-Justifications) below for valid values. |
+| justification | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. Justifications are fixed labels defined by VEX. See [Status Justifications](#status-justifications) below for valid values. |
 | impact_statement | ✓/✕ | For statements conveying a `not_affected` status, a VEX statement MUST include either a status justification or an impact_statement informing why the product is not affected by the vulnerability. An impact statement is a free form text containing a description of why the vulnerability cannot be exploited. This field is not intended to be machine readable so its use is highly discouraged for automated systems. |
 | action_statement | ✕ | For a statement with "affected" status, a VEX statement MUST include a statement that SHOULD describe actions to remediate or mitigate the vulnerability. |
 | action_statement_timestamp | ✕ | The timestamp when the action statement was issued. |
 
 ##### Note on `justification` and `impact_statement`
 
-The Minimal Requirements for VEX document states that a `not_affected` statement 
+The Minimal Requirements for VEX document states that a `not_affected` statement
 MUST provide either a machine readable `justification` label or a free form
 text `impact_statement`. OpenVEX defines both required fields but highly discourages
 the use of the impact statement textual form as it breaks VEX automation and
@@ -239,16 +238,16 @@ readable justification labels and optionally enrich the statement with an
 The subject of an VEX statement is the _product_, a piece of software that MUST be
 addressable via one of the mechanisms offered by OpenVEX. The spec provides an
 expressive `product` struct with fields to address the product using identifiers,
-hashes. Note that all mechanisms to address the product are optional but a 
+hashes. Note that all mechanisms to address the product are optional but a
 valid statement MUST identify a product to be valid.
 
-The optional `@id` field takes an [IRI](#IRI) to make the product referenceable
+The optional `@id` field takes an [IRI][IRI] to make the product referenceable
 inside the document and addressable externally. As Package URLs are valid IRIs,
 the `@id` can take a purl as a value.
 
 The product field should list as many software identifiers as possible to
 help VEX processors when matching the product. The use of
-[Package URLs](https://github.com/package-url/purl-spec) (purls) is recommended. 
+[Package URLs][purl-spec] (purls) is recommended.
 
 The product and its subcomponents fields share an abstract type called
 `Component` that defines the fields that can be used to identify them.
@@ -273,16 +272,15 @@ The only difference in `product` is the nested `subcomponents` field.
 
 ```
 
-
 #### Component Fields
 
 These fields are shared by both the `product` and `subcomponent` structs:
 
 | Field | Required | Description |
 | --- | --- | --- |
-| @id | ✕ | Optional [IRI](#IRI) identifying the component to make it externally referenceable. |
+| @id | ✕ | Optional [IRI][IRI] identifying the component to make it externally referenceable. |
 | identifiers | ✕ | A map of software identifiers where the key is the type and the value the identifier. OpenVEX favors the use of purl but others are recognized (see the Identifiers Labels table below) |
-| hashes | ✕ | Map of cryptographic hashes of the component. The key is the algorithm name based on the [Hash Function Textual Names](https://www.iana.org/assignments/named-information/named-information.xhtml) from IANA. See [Hash Names Table] for the full supported list. |
+| hashes | ✕ | Map of cryptographic hashes of the component. The key is the algorithm name based on the [Hash Function Textual Names][iana-hash-function-names] from IANA. See [Hash Names Table](#appendix-a-hash-names-table) for the full supported list. |
 
 The `product` struct uses the above listed fields but has a list of subcomponents,
 each itself a `component` subclass:
@@ -297,7 +295,7 @@ The vulnerability field in an OpenVEX statement takes the value of a struct that
 has the capability to enumerate the vulnerability name and other aliases that may
 be used to track it in different databases and systems.
 
-As with the product field, the vulberability has an optional "@id" field that
+As with the product field, the vulnerability has an optional "@id" field that
 takes an IRI to make the field referenceable in the document and linkable from
 other linked data resources.
 
@@ -336,10 +334,10 @@ in the `name` field in the list of aliases.
 
 ### Status Labels
 
-Status labels inform the impact of a vulnerability in the products listed 
+Status labels inform the impact of a vulnerability in the products listed
 in a statement. Security tooling such as vulnerability scanners consuming OpenVEX
 documents can key on the status labels to alter their behavior when a vulnerable
-component is detected. Security dashboards can provide users and auditors 
+component is detected. Security dashboards can provide users and auditors
 with contextual data about the evolution of the vulnerability impact.
 
 | Label | Description |
@@ -350,7 +348,7 @@ with contextual data about the evolution of the vulnerability impact.
 | `under_investigation` | It is not yet known whether these product versions are affected by the vulnerability. Updates should be provided in further VEX documents as knowledge evolves. |
 
 Any of these key data points are required to form a valid statement but
-they are not necessarily required to be defined in the statement's data struct. 
+they are not necessarily required to be defined in the statement's data struct.
 Consider the following scenarios:
 
 ### Status Justifications
@@ -359,24 +357,23 @@ When assessing risk, consumers of a `not_affected` software product can know
 why the vulnerability is not affected by reading the justification label
 associated with the VEX statement. These labels are predefined and machine-readable
 to enable automated uses such as deployment policies. The current label catalog
-was defined by the VEX Working Group and published in the 
+was defined by the VEX Working Group and published in the
 [Status Justifications] document on July 2022.
 
-
 | Label | Description |
-| --- | --- | 
+| --- | --- |
 | `component_not_present` | The product is not affected by the vulnerability because the component is not included. The status justification may be used to preemptively inform product users who are seeking to understand a vulnerability that is widespread, receiving a lot of attention, or is in similar products.  |
 | `vulnerable_code_not_present` | The vulnerable component is included in artifact, but the vulnerable code is not present. Typically, this case occurs when source code is configured or built in a way that excluded the vulnerable code. |
 | `vulnerable_code_not_in_execute_path` | The vulnerable code (likely in `subcomponents`) can not be executed as it is used by the product.<br><br>Typically, this case occurs when the product includes the vulnerable `subcomponent` but does not call or use the vulnerable code. |
-| `vulnerable_code_cannot_be_controlled_by_adversary` | The vulnerable code cannot be controlled by an attacker to exploit the vulnerability.<br><br> This justification could  be difficult to prove conclusively. | 
+| `vulnerable_code_cannot_be_controlled_by_adversary` | The vulnerable code cannot be controlled by an attacker to exploit the vulnerability.<br><br> This justification could  be difficult to prove conclusively. |
 | `inline_mitigations_already_exist` | The product includes built-in protections or features that prevent exploitation of the vulnerability. These built-in protections cannot be subverted by the attacker and cannot be configured or disabled by the user. These mitigations completely prevent exploitation based on known attack vectors.<br><br>This justification could be difficult to prove conclusively. History is littered with examples of mitigation bypasses, typically involving minor modifications of existing exploit code.
 
 ## Data Inheritance
 
-VEX statements can inherit values from their document and/or, when embedded or 
+VEX statements can inherit values from their document and/or, when embedded or
 incorporated into another format, from its [encapsulating document](#encapsulating-document).
 
-A valid VEX statement needs to have four key data points which act as 
+A valid VEX statement needs to have four key data points which act as
 the grammatical parts of a sentence:
 
 - One or more products. These are the direct objects of the statement.
@@ -391,16 +388,16 @@ __Note:__  While this specification lists these data fields as optional in the
 statement data struct, the data MUST be defined to have complete statements. A
 document with incomplete statements is not valid.
 
-#### Data Economy 
+#### Data Economy
 
 A document defining multiple statements, all issued at the same time can be
 made less verbose by just inferring the statement timestamps from the date the
 document was issued.
 
-#### Encapsulating Format 
+#### Encapsulating Format
 
 VEX is designed to be encapsulated in other document formats which may have
-redundant features or be better at expressing the required data points. For 
+redundant features or be better at expressing the required data points. For
 example, an in-toto attestation can contain a VEX document in its predicate
 while its subject section lists the software the VEX data applies to.
 
@@ -413,12 +410,12 @@ powerful product tree features.
 
 As mentioned data specifying a statement's product or timestamp can originate
 outside. As the data cascades, more specific elements can override the data
-defined in more general ones. The following two phrases define how the 
+defined in more general ones. The following two phrases define how the
 inheritance flow works:
 
 #### Timestamps
 
-A timestamp in a `statement` entry overrides a timestamp defined at the 
+A timestamp in a `statement` entry overrides a timestamp defined at the
 document level which in turn overrides timestamps defined on the encapsulating
 document.
 
@@ -429,7 +426,7 @@ identification data defined on the encapsulating document.
 
 ### Updating Statements with Inherited Data
 
-When updating a document with statements with data implied via inheritance, 
+When updating a document with statements with data implied via inheritance,
 the integrity of the untouched statements MUST be preserved. In the following
 example, the sole statement has its timestamp data derived from the document:
 
@@ -495,9 +492,9 @@ to avoid duplication:
 ## OpenVEX and JSON-LD
 
 OpenVEX documents express data that is by nature interlinked. Documents and are
-designed to be understood by [JSON-LD](https://www.w3.org/TR/json-ld11/) parsers,
+designed to be understood by [JSON-LD][JSON-LD] parsers,
 this lets them reference resources expressed in other json-ld formats such as
-[SPDX 3](https://github.com/spdx/spdx-3-model). 
+[SPDX 3][SPDX3].
 
 ### VEX Extensions
 
@@ -506,26 +503,26 @@ requirements in the the following two ways:
 
 1. OpenVEX extends the document identifier required by VEX to make the strings
 compatible with the Internationalized Resource Identifier (IRI) specification
-(see [RFC3987](https://www.rfc-editor.org/rfc/rfc3987)). 
+(see [RFC3987]).
 
 2. Addition of the `@context` field at the document level. The additional field is
 not required by VEX but it is added to make the documents parseable by json-ld
-processors. 
+processors.
 
 ### Public IRI Namespaces
 
-As all documents are required to be identified by an IRI, OpenVEX defines a 
+As all documents are required to be identified by an IRI, OpenVEX defines a
 public namespace that can be used by documents. Users of OpenVEX MAY choose to
 use the shared namespace.
 
 The shared namespace is defined under the openvex.dev domain name:
 
-`    https://openvex.dev/docs/[name]    `
+`https://openvex.dev/docs/[name]`
 
 Users can start issuing IRIs for their documents by appending a IRI valid string
 to the shared namespace:
 
-`    https://openvex.dev/docs/[myproject]    `
+`https://openvex.dev/docs/[myproject]`
 
 There are two reserved shared namespaces with special meanings:
 
@@ -536,20 +533,20 @@ do not matter.
 are expected to run.
 
 Please note that initially, OpenVEX does not provide a registry of namespaces or
-hosting or redirection of IRIs. 
+hosting or redirection of IRIs.
 
 For more information check the OpenVEX [JSON-LD](JSON-LD.md) document and the
-W3C's [JSON-LD reommendation](https://www.w3.org/TR/json-ld11/).
+W3C's [JSON-LD recommendation][JSON-LD].
 
 ## Example
 
 To illustrate how OpenVEX can specify a document switching off a false positive,
 let's look at an example. According to the
-[Spring Blog](https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot),
+[Spring Blog][log4j-spring-boot],
 the included log4j library in Spring Boot 2.6.0 is within the versions affected by
-the [log4shell vulnerability](https://nvd.nist.gov/vuln/detail/CVE-2021-44228).
-In the post, however the project maintainers explain that it is not exploitable 
-as shipped and they provide some details and guidance to users. 
+the [log4shell vulnerability][log4shell-vulnerability].
+In the post, however the project maintainers explain that it is not exploitable
+as shipped and they provide some details and guidance to users.
 
 To capture Spring's advise in an OpenVEX document and fend off any false positives,
 the project could issue an OpenVEX document as follows:
@@ -598,7 +595,7 @@ alert and dashboards could present users with the official guidance from the pro
 
 The following list of hash names can be used as keys in the `hashes` field of the
 product field. These labels follow and extend the
-[Hash Function Textual Names](https://www.iana.org/assignments/named-information/named-information.xhtml)
+[Hash Function Textual Names][iana-hash-function-names]
 document from IANA.
 
 | Hash Label |
@@ -621,34 +618,46 @@ document from IANA.
 The following labels can be used as keys when enumerating software identifiers
 in the product data structure.
 
-| Type Label | Identifier type | 
+| Type Label | Identifier type |
 | --- | --- |
-| purl | [Package URL](https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst) |
-|	cpe22 | [Common Platform Enumeration v2.2](https://cpe.mitre.org/files/cpe-specification_2.2.pdf) |
-| cpe23 | [Common Platform Enumeration v2.3](https://csrc.nist.gov/pubs/ir/7695/final) |
+| purl | [Package URL][purl-spec] |
+| cpe22 | [Common Platform Enumeration v2.2][CPE-2.2] |
+| cpe23 | [Common Platform Enumeration v2.3][CPE-2.3] |
 
-## Revisions 
+## Revisions
 
 | Date | Revision |
-| --- | --- | 
+| --- | --- |
 | 2023-07-18 | Added hash and identifier label catalog tables |
-| 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field](https://github.com/openvex/community/blob/main/enhancements/opev-0015.md) |
-| 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field](https://github.com/openvex/community/blob/main/enhancements/opev-0014.md) |
+| 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field][OPEV-0015] |
+| 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field][OPEV-0014] |
 | 2023-07-18 | Bumped version of the spec to v0.0.2 after update to meet the VEX-WG doc. |
 | 2023-06-01 | Removed supplier from the document level (following VEX-WG doc). |
 | 2023-05-29 | Specification updated to reflect the published [Minimum Requirements for VEX] document. |
 | 2023-01-08 | First Draft of the OpenVEX Specification. |
-| 2023-01-16 | Updated specx draft to reflect initial review. |
+| 2023-01-16 | Updated spec draft to reflect initial review. |
 | 2023-01-16 | Added JSON-LD and namespace section. |
 | 2023-01-16 | Add example section. |
 | 2023-05-29 | Added missing fields to match the VEX-WG's [Minimum Requirements for VEX] document. |
 
-
 ## Sources
 
-* Vulnerability Exploitability eXchange (VEX) - [Status Justifications]
-* [Minimum Requirements for VEX] document, published by CISA.
+- Vulnerability Exploitability eXchange (VEX) - [Status Justifications]
+- [Minimum Requirements for VEX] document, published by CISA.
 
-[Status Justifications]: https://www.cisa.gov/sites/default/files/publications/VEX_Status_Justification_Jun22.pdf
-[Minimum Requirements for VEX]: https://www.cisa.gov/sites/default/files/2023-04/minimum-requirements-for-vex-508c.pdf
+[CISA]: https://www.cisa.gov/
+[CPE-2.2]: https://cpe.mitre.org/files/cpe-specification_2.2.pdf
+[CPE-2.3]: https://csrc.nist.gov/pubs/ir/7695/final
+[iana-hash-function-names]: https://www.iana.org/assignments/named-information/named-information.xhtml
 [IRI]: https://www.ietf.org/rfc/rfc3987.txt
+[JSON-LD]: https://www.w3.org/TR/json-ld11/
+[log4j-spring-boot]: https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot
+[log4shell-vulnerability]: https://nvd.nist.gov/vuln/detail/CVE-2021-44228
+[Minimum Requirements for VEX]: https://www.cisa.gov/sites/default/files/2023-04/minimum-requirements-for-vex-508c.pdf
+[OPEV-0014]: https://github.com/openvex/community/blob/main/enhancements/opev-0014.md
+[OPEV-0015]: https://github.com/openvex/community/blob/main/enhancements/opev-0015.md
+[purl-spec]: https://github.com/package-url/purl-spec
+[RFC2119]: https://www.rfc-editor.org/rfc/rfc2119
+[RFC3987]: https://www.rfc-editor.org/rfc/rfc3987
+[SPDX3]: https://github.com/spdx/spdx-3-model
+[Status Justifications]: https://www.cisa.gov/sites/default/files/publications/VEX_Status_Justification_Jun22.pdf
