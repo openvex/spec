@@ -125,7 +125,7 @@ Here is a sample of a minimal OpenVEX document:
 
 ```json
 {
-  "@context": "https://openvex.dev/ns",
+  "@context": "https://openvex.dev/ns/v0.2.0",
   "@id": "https://openvex.dev/docs/example/vex-9fb3463de1b57",
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
@@ -153,7 +153,7 @@ The following table lists the fields in the document struct
 
 | Field | Required | Description |
 | --- | --- | --- |
-| @context | ✓ | The URL linking to the OpenVEX context definition. Fixed to `https://openvex.dev/ns` before 1.0 is released. |
+| @context | ✓ | The URL linking to the OpenVEX context definition. The URL is structured as https://openvex.dev/ns/v[version], where [version] represents the specific version number, such as v0.2.0. If the version is omitted, it defaults to v0.0.1. |
 | @id | ✓ | The IRI identifying the VEX document. |
 | author | ✓ | Author is the identifier for the author of the VEX statement. This field should ideally be a machine readable identifier such as an IRI, email address, etc. `author` MUST be an individual or organization. `author` identity SHOULD be cryptographically associated with the signature of the VEX document or other exchange mechanism. |
 | role | ✕ | role describes the role of the document author.  |
@@ -432,7 +432,7 @@ example, the sole statement has its timestamp data derived from the document:
 
 ```json
 {
-  "@context": "https://openvex.dev/ns",
+  "@context": "https://openvex.dev/ns/v0.2.0",
   "@id": "https://openvex.dev/docs/example/vex-9fb3463de1b57",
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
@@ -459,7 +459,7 @@ to avoid duplication:
 
 ```json
 {
-  "@context": "https://openvex.dev/ns",
+  "@context": "https://openvex.dev/ns/v0.2.0",
   "@id": "https://openvex.dev/docs/example/vex-84822c4e5028c",
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
@@ -553,7 +553,7 @@ the project could issue an OpenVEX document as follows:
 
 ```json
 {
-  "@context": "https://openvex.dev/ns",
+  "@context": "https://openvex.dev/ns/v0.2.0",
   "@id": "https://openvex.dev/docs/public/vex-2e67563e128250cbcb3e98930df948dd053e43271d70dc50cfa22d57e03fe96f",
   "author": "Spring Builds <spring-builds@users.noreply.github.com>",
   "role": "Project Release Bot",
