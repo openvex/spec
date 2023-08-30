@@ -51,10 +51,12 @@ of a VEX statement:
 
 ```json
     {
-      "vulnerability": "CVE-2014-123456",
+      "vulnerability": {
+        "name": "CVE-2014-123456"
+      },
       "products": [
-        "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
-        "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"
+        {"@id": "pkg:apk/distro/git@2.39.0-r1?arch=armv7"},
+        {"@id": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"}
       ],
       "status": "fixed"
     }
@@ -128,7 +130,7 @@ embedded OpenVEX document:
     "version": "1",
     "statements": [
         {
-            "vulnerability": "CVE-2023-12345",
+            "vulnerability": {"name": "CVE-2023-12345"},
             "status": "fixed"
         }
     ]
@@ -160,9 +162,11 @@ model that can host any number of statements, possibly with different subjects:
       "status": "fixed"
     },
     {
-      "vulnerability": "CVE-2014-123456",
+      "vulnerability": {
+        "name": "CVE-2014-123456"
+      },
       "products": [
-        "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"
+        {"@id": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"}
       ],
       "status": "under_investigation"
     },
