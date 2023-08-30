@@ -330,7 +330,7 @@ in the `name` field in the list of aliases.
 | @id | ✕ | An Internationalized Resource Identifier (IRI) identifying the struct. Used to reference and link the vulnerability data. |
 | name | ✓ | A string with the main identifier used to name the vulnerability. |
 | description | ✕ | Optional free form text describing the vulnerability. |
-| aliases | x | A list of strings enumerating other names under which the vulnerability may be known. |
+| aliases | ✕ | A list of strings enumerating other names under which the vulnerability may be known. |
 
 ### Status Labels
 
