@@ -23,6 +23,7 @@
                 },
                 "aliases": {
                     "type": "array",
+                    "uniqueItems": true,
                     "items": {
                         "type": "string"
                     },
@@ -131,6 +132,7 @@
                 },
                 "subcomponents": {
                     "type": "array",
+                    "uniqueItems": true,
                     "description": "List of subcomponent structs describing the subcomponents subject of the VEX statement.",
                     "items": {
                         "$ref": "#/$defs/subcomponent"
@@ -180,6 +182,7 @@
         },
         "statements": {
             "type": "array",
+            "uniqueItems": true,
             "minItems": 1,
             "description": "A statement is an assertion made by the document's author about the impact a vulnerability has on one or more software 'products'.",
             "items": {
@@ -210,6 +213,7 @@
                     },
                     "products": {
                         "type": "array",
+                        "uniqueItems": true,
                         "description": "List of product structs that the statement applies to.",
                         "items": {
                             "$ref": "#/$defs/component"
