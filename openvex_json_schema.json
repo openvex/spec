@@ -10,7 +10,7 @@
             "properties": {
                 "@id": {
                     "type": "string",
-                    "format": "uri",
+                    "format": "iri",
                     "description": "An Internationalized Resource Identifier (IRI) identifying the struct."
                 },
                 "name": {
@@ -100,7 +100,7 @@
             "properties": {
                 "@id": {
                     "type": "string",
-                    "format": "uri",
+                    "format": "iri",
                     "description": "Optional IRI identifying the component to make it externally referenceable."
                 },
                 "identifiers": {
@@ -119,7 +119,7 @@
             "properties": {
                 "@id": {
                     "type": "string",
-                    "format": "uri",
+                    "format": "iri",
                     "description": "Optional IRI identifying the component to make it externally referenceable."
                 },
                 "identifiers": {
@@ -150,7 +150,7 @@
         },
         "@id": {
             "type": "string",
-            "format": "uri",
+            "format": "iri",
             "description": "The IRI identifying the VEX document."
         },
         "author": {
@@ -189,7 +189,7 @@
                 "properties": {
                     "@id": {
                         "type": "string",
-                        "format": "uri",
+                        "format": "iri",
                         "description": "Optional IRI identifying the statement to make it externally referenceable."
                     },
                     "version": {
