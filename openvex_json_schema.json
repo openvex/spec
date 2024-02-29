@@ -42,16 +42,21 @@
                     "type": "string",
                     "description": "Package URL"
                 },
-                "@cpe22": {
+                "cpe22": {
                     "type": "string",
                     "description": "Common Platform Enumeration v2.2"
                 },
-                "@cpe23": {
+                "cpe23": {
                     "type": "string",
                     "description": "Common Platform Enumeration v2.3"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "anyOf": [
+                { "required": ["purl"] },
+                { "required": ["cpe22"] },
+                { "required": ["cpe23"] }
+              ]
         },
         "hashes": {
             "type": "object",
@@ -112,7 +117,11 @@
                     "description": "Map of cryptographic hashes of the component."
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "anyOf": [
+                { "required": ["@id"] },
+                { "required": ["identifiers"] }
+              ]
         },
         "component": {
             "type": "object",
@@ -139,7 +148,11 @@
                     }
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "anyOf": [
+                { "required": ["@id"] },
+                { "required": ["identifiers"] }
+              ]
         }
     },
     "properties": {
