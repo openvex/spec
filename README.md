@@ -105,6 +105,10 @@ Check out
 and our [examples repository](https://github.com/openvex/examples) for more
 information and use cases.
 
+## How can I check if my OpenVEX document is valid?
+
+There is a [JSON Schema](https://github.com/openvex/spec/blob/main/openvex_json_schema.json) for the OpenVEX specification. You can use tools listed on https://json-schema.org/implementations to check the validity of your OpenVEX document.
+
 ## OpenVEX Roadmap
 
 The OpenVEX specification is currently a draft.

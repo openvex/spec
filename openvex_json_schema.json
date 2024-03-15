@@ -286,9 +286,9 @@
                             "properties": { "status": { "const": "not_affected" }}
                         },
                         "then": {
-                            "oneOf": [
-                                { "required": ["justification"], "not": { "required": ["impact_statement"]}},
-                                { "required": ["impact_statement"], "not": { "required": ["justification"]}}
+                            "anyOf": [
+                                { "required": ["justification"]},
+                                { "required": ["impact_statement"]}
                             ]
                         }
                     },
