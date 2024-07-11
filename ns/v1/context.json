@@ -1,9 +1,9 @@
 {
   "xsd": "http://www.w3.org/2001/XMLSchema#",
   "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-  "openvex": "https://openvex.dev/ns/v1#",
+  "openvex": "https://openvex.dev/ns/v0.2.0#",
   "author": {
-    "@id": "openvex:author",
+    "@id":"openvex:author",
     "@type": "xsd:string"
   },
   "role": {
@@ -11,8 +11,16 @@
     "@type": "xsd:string"
   },
   "version": {
-    "@id": "openvex:author",
-    "@type": "xsd:stringOrNumber"
+    "@id": "openvex:version",
+    "@type": "xsd:integer"
+  },
+  "softwareIdentifier": {
+    "@id":"openvex:softwareIdentifier",
+    "@type": "xsd:string"
+  },
+  "vexStatus": {
+    "@id":"openvex:vexStatus",
+    "@type":"xsd:string"
   },
   "status": {
     "@type": "openvex:vexStatus",
@@ -28,43 +36,43 @@
   },
   "hashes": {
     "@id": "openvex:hash",
-    "@type": "openvex:hashString",
+    "@type": "xsd:string",
     "@container": "@index"
   },
+  
+  "statements": {
+    "@id": "openvex:statement",
+    "@type":"openvex:vexStatement",
+    "@container":"@set"
+  },
+  "subcomponents": {
+    "@id":"openvex:subcomponent",
+    "@type":"openvex:component",
+    "@container":"@set"
+  },
+  "products": {
+    "@id": "openvex:product",
+    "@container": "@set",
+    "@context": {}
+  },
+      
   "identifiers": {
     "@id": "openvex:identifier",
     "@type": "openvex:softwareIdentifier",
     "@container": "@index"
   },
-  "statements": {
-    "@container": "@list",
-    "@id": "openvex:statement",
+    
+  "vulnerability": {
+    "@id": "openvex:vulnerability",
     "@context": {
-      "vulnerability": {
-        "@id": "openvex:vulnerability",
-        "@context": {
-          "name": {
-            "@id": "openvex:name",
-            "@type": "openvex:vulnName"
-          },
-          "aliases": {
-            "@id": "openvex:alias",
-            "@type": "openvex:vulnName",
-            "@container": "@list"
-          }
-        }
+      "name": {
+        "@id": "openvex:name",
+        "@type": "openvex:vulnName"
       },
-      "products": {
-        "@id": "openvex:product",
-        "@type": "openvex:component",
-        "@container": "@list",
-        "@context": {
-          "subcomponents": {
-            "@id": "openvex:subcomponent",
-            "@type": "openvex:component",
-            "@container": "@list"
-          }
-        }
+      "aliases": {
+        "@id":"openvex:alias",
+        "@type":"openvex:vulnName",
+        "@container":"@set"
       }
     }
   }
