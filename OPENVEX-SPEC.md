@@ -161,6 +161,7 @@ The following table lists the fields in the document struct
 | last_updated | ✕ | Date of last modification to the document. |
 | version | ✓ | Version is the document version. It must be incremented when any content within the VEX document changes, including any VEX statements included within the VEX document. |
 | tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It may specify tools or automated processes used in the document or statement generation. |
+| statements | ✓ | The list of statements to contain within the document. |
 
 ### Statement
 
