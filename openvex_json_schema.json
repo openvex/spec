@@ -199,6 +199,7 @@
             "minItems": 1,
             "description": "A statement is an assertion made by the document's author about the impact a vulnerability has on one or more software 'products'.",
             "items": {
+                "type": "object",
                 "properties": {
                     "@id": {
                         "type": "string",
