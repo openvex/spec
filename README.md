@@ -84,7 +84,7 @@ and one or more
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-08T18:02:03.647787998-06:00",
-  "version": "1",
+  "version": 1,
   "statements": [
     {
       "vulnerability": {
