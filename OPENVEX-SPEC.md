@@ -461,11 +461,11 @@ to avoid duplication:
 ```json
 {
   "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://openvex.dev/docs/example/vex-84822c4e5028c",
+  "@id": "https://openvex.dev/docs/example/vex-9fb3463de1b57",
   "author": "Wolfi J Inkinson",
   "role": "Document Creator",
   "timestamp": "2023-01-09T09:08:42-06:00",
-  "version": 1,
+  "version": 2,
   "statements": [
     {
       "timestamp": "2023-01-08T18:02:03-06:00",
