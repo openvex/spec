@@ -35,7 +35,7 @@ structures (see [Inheritance Flow](#inheritance-flow)).
 
 ## VEX Documents
 
-A VEX document is a data structure grouping one or more VEX statements.
+A VEX document is a data structure grouping zero or more VEX statements.
 Documents also have timestamps, which may cascade down to statements (see
 [Inheritance Flow](#inheritance-flow)). Documents can also be versioned.
 
@@ -74,7 +74,7 @@ described in [RFC2119].
 
 #### Document
 
-A data structure that groups together one or more VEX statements. A document
+A data structure that groups together zero or more VEX statements. A document
 MUST define a timestamp to express when it was issued.
 
 #### Encapsulating Document
@@ -119,6 +119,11 @@ product's dependencies.
 A VEX document consists of two parts: The document metadata and a collection
 of statements. Some fields in the document metadata are required.
 
+__Note:__ A document with an empty `statements` array is valid when all required
+metadata fields (`@context`, `@id`, `author`, `timestamp`, `version`) are present.
+An empty `statements` list indicates that the author is not asserting any
+vulnerability impact at the time the document was issued.
+
 OpenVEX documents are serialized in json-ld structs. File encoding MUST be UTF8.
 
 Here is a sample of a minimal OpenVEX document:
@@ -161,7 +166,7 @@ The following table lists the fields in the document struct
 | last_updated | ✕ | Date of last modification to the document. |
 | version | ✓ | Version is the document version. It must be incremented when any content within the VEX document changes, including any VEX statements included within the VEX document. |
 | tooling | ✕ | Tooling expresses how the VEX document and contained VEX statements were generated. It may specify tools or automated processes used in the document or statement generation. |
-| statements | ✓ | The list of statements to contain within the document. |
+| statements | ✓ | The list of statements contained in the document. May be empty. |
 
 ### Statement
 
