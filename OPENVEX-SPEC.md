@@ -260,15 +260,22 @@ The only difference in `product` is the nested `subcomponents` field.
 {
   "@id": "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7",
   "identifiers": {
-    "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.4",
-    "cpe23": "cpe:2.3:a:apache:log4j:2.4:-:*:*:*:*:*:*",
-    "cpe22": "cpe:/a:apache:log4j:2.4:-",
+    "purl": "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7"
   },
   "hashes": {
     "sha-256": "402fa523b96591d4450ace90e32d9f779fcfd938903e1c5bf9d3701860b8f856",
     "sha-512": "d2eb65b083923d90cf55111c598f81d3d9c66f4457dfd173f01a6b7306f3b222541be42a35fe47191a9ca00e017533e8c07ca192bd22954e125557c72d2a3178"
   },
-  "subcomponents": []
+  "subcomponents": [
+    {
+      "@id": "pkg:maven/org.apache.logging.log4j/log4j-core@2.4",
+      "identifiers": {
+        "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.4",
+        "cpe23": "cpe:2.3:a:apache:log4j:2.4:*:*:*:*:*:*:*",
+        "cpe22": "cpe:/a:apache:log4j:2.4"
+      }
+    }
+  ]
 }
 
 ```
