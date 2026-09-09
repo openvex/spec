@@ -22,6 +22,10 @@
     "@id":"openvex:vexStatus",
     "@type":"xsd:string"
   },
+  "vexJustification": {
+    "@id":"openvex:vexJustification",
+    "@type":"xsd:string"
+  },
   "status": {
     "@type": "openvex:vexStatus",
     "@id": "openvex:status"
@@ -30,9 +34,37 @@
     "@type": "xsd:dateTime",
     "@id": "openvex:timestamp"
   },
-  "name": {
+  "last_updated": {
+    "@type": "xsd:dateTime",
+    "@id": "openvex:lastUpdated"
+  },
+  "tooling": {
     "@type": "xsd:string",
-    "@id": "openvex:vulnName"
+    "@id": "openvex:tooling"
+  },
+  "supplier": {
+    "@type": "xsd:string",
+    "@id": "openvex:supplier"
+  },
+  "status_notes": {
+    "@type": "xsd:string",
+    "@id": "openvex:statusNotes"
+  },
+  "justification": {
+    "@type": "openvex:vexJustification",
+    "@id": "openvex:justification"
+  },
+  "impact_statement": {
+    "@type": "xsd:string",
+    "@id": "openvex:impactStatement"
+  },
+  "action_statement": {
+    "@type": "xsd:string",
+    "@id": "openvex:actionStatement"
+  },
+  "action_statement_timestamp": {
+    "@type": "xsd:dateTime",
+    "@id": "openvex:actionStatementTimestamp"
   },
   "hashes": {
     "@id": "openvex:hash",
@@ -42,12 +74,10 @@
   
   "statements": {
     "@id": "openvex:statement",
-    "@type":"openvex:vexStatement",
     "@container":"@set"
   },
   "subcomponents": {
     "@id":"openvex:subcomponent",
-    "@type":"openvex:component",
     "@container":"@set"
   },
   "products": {
@@ -73,6 +103,10 @@
         "@id":"openvex:alias",
         "@type":"openvex:vulnName",
         "@container":"@set"
+      },
+      "description": {
+        "@id":"openvex:vulnDescription",
+        "@type":"xsd:string"
       }
     }
   }
