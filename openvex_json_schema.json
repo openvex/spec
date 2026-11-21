@@ -177,11 +177,13 @@
         "timestamp": {
             "type": "string",
             "format": "date-time",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$",
             "description": "Timestamp defines the time at which the document was issued."
         },
         "last_updated": {
             "type": "string",
             "format": "date-time",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$",
             "description": "Date of last modification to the document."
         },
         "version": {
@@ -218,11 +220,13 @@
                     "timestamp": {
                         "type": "string",
                         "format": "date-time",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$",
                         "description": "Timestamp is the time at which the information expressed in the statement was known to be true."
                     },
                     "last_updated": {
                         "type": "string",
                         "format": "date-time",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$",
                         "description": "Timestamp when the statement was last updated."
                     },
                     "products": {
@@ -273,6 +277,7 @@
                     "action_statement_timestamp": {
                         "type": "string",
                         "format": "date-time",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$",
                         "description": "The timestamp when the action statement was issued."
                     }
                 },

@@ -114,6 +114,15 @@ The subcomponents SHOULD also list software identifiers and they SHOULD also be
 listed in the product SBOM. `subcomponents` will most often be one or more of the
 product's dependencies.
 
+#### Timestamp
+
+A point in time recorded in the `timestamp`, `last_updated`, or
+`action_statement_timestamp` fields. A timestamp MUST be a `date-time` as
+defined in [RFC 3339][RFC3339] section 5.6, which always includes a time zone:
+either `Z` for UTC or a numeric offset such as `-06:00`. A timestamp without a
+time zone, such as `2023-01-08T18:02:03`, is not valid, because it does not
+identify a single point in time.
+
 ### Document
 
 A VEX document consists of two parts: The document metadata and a collection
@@ -636,6 +645,7 @@ in the product data structure.
 
 | Date | Revision |
 | --- | --- |
+| 2026-11-21 | Required timestamps to include a time zone ([RFC 3339][RFC3339] `date-time`). |
 | 2023-07-18 | Added hash and identifier label catalog tables |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0015: Expansion of the Vulnerability Field][OPEV-0015] |
 | 2023-07-18 | Updated spec to reflect changes in [OPEV-0014: Expansion of the VEX Product Field][OPEV-0014] |
@@ -666,6 +676,7 @@ in the product data structure.
 [OPEV-0015]: https://github.com/openvex/community/blob/main/enhancements/opev-0015.md
 [purl-spec]: https://github.com/package-url/purl-spec
 [RFC2119]: https://www.rfc-editor.org/rfc/rfc2119
+[RFC3339]: https://www.rfc-editor.org/rfc/rfc3339
 [RFC3987]: https://www.rfc-editor.org/rfc/rfc3987
 [SPDX3]: https://github.com/spdx/spdx-3-model
 [Status Justifications]: https://www.cisa.gov/sites/default/files/publications/VEX_Status_Justification_Jun22.pdf
