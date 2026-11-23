@@ -40,14 +40,17 @@
             "properties": {
                 "purl": {
                     "type": "string",
+                    "pattern": "^pkg:",
                     "description": "Package URL"
                 },
                 "cpe22": {
                     "type": "string",
+                    "pattern": "^cpe:/",
                     "description": "Common Platform Enumeration v2.2"
                 },
                 "cpe23": {
                     "type": "string",
+                    "pattern": "^cpe:2\\.3:",
                     "description": "Common Platform Enumeration v2.3"
                 }
             },
@@ -159,6 +162,7 @@
         "@context": {
             "type": "string",
             "format": "uri",
+            "pattern": "^https://openvex\\.dev/ns(/v[0-9]+\\.[0-9]+\\.[0-9]+)?$",
             "description": "The URL linking to the OpenVEX context definition."
         },
         "@id": {
