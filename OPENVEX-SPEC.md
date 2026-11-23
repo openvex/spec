@@ -222,8 +222,8 @@ readable justification labels and optionally enrich the statement with an
 ```json
     {
       "vulnerability": {
-        "name": "CVE-2023-12345",
-      }
+        "name": "CVE-2023-12345"
+      },
       "products": [
         {"@id": "pkg:apk/wolfi/product@1.23.0-r1?arch=armv7"}
       ],
@@ -321,8 +321,8 @@ other linked data resources.
         "SNYK-RHEL7-LOG4J-1472071",
         "DSA-4686-1",
         "USN-4495",
-        "DLA-2065-1",
-    ],
+        "DLA-2065-1"
+    ]
   }
 }
 ```
@@ -350,7 +350,7 @@ with contextual data about the evolution of the vulnerability impact.
 
 | Label | Description |
 | --- | --- |
-| `not_affected` | No remediation is required regarding this vulnerability. A `not_affected` status required the addition of a `justification` to the statement. |
+| `not_affected` | No remediation is required regarding this vulnerability. A `not_affected` status requires the addition of a `justification` or an `impact_statement` to the statement. |
 | `affected` | Actions are recommended to remediate or address this vulnerability. |
 | `fixed` | These product versions contain a fix for the vulnerability. |
 | `under_investigation` | It is not yet known whether these product versions are affected by the vulnerability. Updates should be provided in further VEX documents as knowledge evolves. |
@@ -480,7 +480,7 @@ to avoid duplication:
         "name": "CVE-2023-12345"
       },
       "products": [
-        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"},
+        {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"}
       ],
       "status": "under_investigation"
     },
@@ -492,7 +492,7 @@ to avoid duplication:
         {"@id": "pkg:apk/wolfi/git@2.39.0-r1?arch=armv7"}
       ],
       "status": "fixed"
-    },
+    }
   ]
 }
 ```
@@ -581,16 +581,16 @@ the project could issue an OpenVEX document as follows:
         {
           "@id": "pkg:maven/org.springframework.boot/spring-boot@2.6.0-M3",
           "identifiers": {
-            "purl": "pkg:maven/org.springframework.boot/spring-boot@2.6.0-M3",
-          }
-          "hashes":{
+            "purl": "pkg:maven/org.springframework.boot/spring-boot@2.6.0-M3"
+          },
+          "hashes": {
             "sha-256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         }
       ],
       "status": "not_affected",
-      "justification": "vulnerable_code_not_in_execute_path"
-      "impact_statement": "Spring Boot users are only affected by this vulnerability if they have switched the default logging system to Log4J2. The log4j-to-slf4j and log4j-api jars that we include in spring-boot-starter-logging cannot be exploited on their own. Only applications using log4j-core and including user input in log messages are vulnerable.",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "Spring Boot users are only affected by this vulnerability if they have switched the default logging system to Log4J2. The log4j-to-slf4j and log4j-api jars that we include in spring-boot-starter-logging cannot be exploited on their own. Only applications using log4j-core and including user input in log messages are vulnerable."
     }
   ]
 }
