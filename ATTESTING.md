@@ -81,13 +81,13 @@ removed for clarity):
       "name": "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
       "digest": {
         "sha256": "74634d9736a45ca9f6e1187e783492199e020f4a5c19d0b1abc2b604f894ac99"
-      },
+      }
     },
     {
       "name": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64",
       "digest": {
         "sha256": "6bd98fe56e4d91439343d123d98522005874957ea1cb6075e75544d7753bd8d7"
-      },
+      }
     }
   ],
   "predicate": {
@@ -112,13 +112,13 @@ embedded OpenVEX document:
       "name": "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
       "digest": {
         "sha256": "74634d9736a45ca9f6e1187e783492199e020f4a5c19d0b1abc2b604f894ac99"
-      },
+      }
     },
     {
       "name": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64",
       "digest": {
         "sha256": "6bd98fe56e4d91439343d123d98522005874957ea1cb6075e75544d7753bd8d7"
-      },
+      }
     }
   ],
   "predicate": {
@@ -127,7 +127,7 @@ embedded OpenVEX document:
     "author": "Wolfi J Inkinson",
     "role": "Security Researcher",
     "timestamp": "2023-01-08T18:02:03.647787998-06:00",
-    "version": "1",
+    "version": 1,
     "statements": [
         {
             "vulnerability": {"name": "CVE-2023-12345"},
@@ -155,9 +155,11 @@ model that can host any number of statements, possibly with different subjects:
 ```json
 "statements": [
     {
-      "vulnerability": "CVE-2014-123456",
+      "vulnerability": {
+        "name": "CVE-2014-123456"
+      },
       "products": [
-        "pkg:apk/distro/git@2.39.0-r1?arch=armv7"
+        {"@id": "pkg:apk/distro/git@2.39.0-r1?arch=armv7"}
       ],
       "status": "fixed"
     },
@@ -169,7 +171,7 @@ model that can host any number of statements, possibly with different subjects:
         {"@id": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"}
       ],
       "status": "under_investigation"
-    },
+    }
 ]
 ```
 
@@ -179,22 +181,42 @@ section. To attest the example above, an attestation can use any of the followin
 subject structs:
 
 ```json
-    "subject": {
-        "pkg:apk/distro/git@2.39.0-r1?arch=armv7"
-    }
+    "subject": [
+        {
+          "name": "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
+          "digest": {
+            "sha256": "74634d9736a45ca9f6e1187e783492199e020f4a5c19d0b1abc2b604f894ac99"
+          }
+        }
+    ]
 ```
 
 ```json
-    "subject": {
-        "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"
-    }
+    "subject": [
+        {
+          "name": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64",
+          "digest": {
+            "sha256": "6bd98fe56e4d91439343d123d98522005874957ea1cb6075e75544d7753bd8d7"
+          }
+        }
+    ]
 ```
 
 ```json
-    subject: {
-        "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
-        "pkg:apk/distro/git@2.39.0-r1?arch=x86_64"
-    }
+    "subject": [
+        {
+          "name": "pkg:apk/distro/git@2.39.0-r1?arch=armv7",
+          "digest": {
+            "sha256": "74634d9736a45ca9f6e1187e783492199e020f4a5c19d0b1abc2b604f894ac99"
+          }
+        },
+        {
+          "name": "pkg:apk/distro/git@2.39.0-r1?arch=x86_64",
+          "digest": {
+            "sha256": "6bd98fe56e4d91439343d123d98522005874957ea1cb6075e75544d7753bd8d7"
+          }
+        }
+    ]
 ```
 
 When an identifier is listed in the subject section, it signals any processor
